@@ -20,3 +20,4 @@ function(enable_raylib TARGET)
 endfunction()
 
 add_subdirectory(HelloWorld)
+add_subdirectory(Loop)
