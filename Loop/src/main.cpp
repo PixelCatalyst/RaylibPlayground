@@ -7,6 +7,9 @@ int main()
     while (!WindowShouldClose()) {
         BeginDrawing();
         ClearBackground(RAYWHITE);
+
+        DrawLine(100, 100, 200, 200, BLACK);
+
         EndDrawing();
     }
 
