@@ -1,10 +1,9 @@
 #include "App.h"
 
+#include "DrawUtils.h"
+
 App::App() :
-        triangle{Vector2{-50, 50},
-                 Vector2{50, 50},
-                 Vector2{0, -50},
-                 SKYBLUE}
+        mosaic(4, 4)
 {
 }
 
@@ -34,13 +33,7 @@ void App::draw()
     BeginDrawing();
     ClearBackground(RAYWHITE);
 
-    rlPushMatrix();
-    {
-        rlTranslatef(300.0f, 400.0f, 0.0f);
-        rlRotatef(gameState.angle, 0.0f, 0.0f, 1.0f);
-        DrawTriangle(triangle.a, triangle.b, triangle.c, triangle.color);
-    }
-    rlPopMatrix();
+    DrawUtils::drawCentered(mosaic);
 
     EndDrawing();
 }
