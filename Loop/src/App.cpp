@@ -2,15 +2,14 @@
 
 #include "DrawUtils.h"
 
-App::App() :
-        mosaic(4, 4)
-{
-}
+App::App() = default;
 
 void App::init()
 {
     InitWindow(600, 800, "Loop");
     SetTargetFPS(60);
+
+    mosaic = new Mosaic(4, 4);
 }
 
 bool App::isRunning()
@@ -33,7 +32,7 @@ void App::draw()
     BeginDrawing();
     ClearBackground(RAYWHITE);
 
-    DrawUtils::drawCentered(mosaic);
+    DrawUtils::drawCentered(*mosaic);
 
     EndDrawing();
 }
@@ -41,4 +40,9 @@ void App::draw()
 void App::close()
 {
     CloseWindow();
+}
+
+App::~App()
+{
+    delete mosaic;
 }

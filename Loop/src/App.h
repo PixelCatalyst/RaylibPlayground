@@ -14,9 +14,11 @@ class App
 {
 private:
     GameState gameState;
-    Mosaic mosaic;
+    Mosaic* mosaic;
 public:
     explicit App();
+
+    virtual ~App();
 
     void init();
 

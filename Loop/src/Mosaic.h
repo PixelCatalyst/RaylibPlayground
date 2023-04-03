@@ -4,10 +4,22 @@
 
 #include <map>
 
+class Sprite
+{
+private:
+    Texture2D texture;
+public:
+    explicit Sprite();
+
+    void draw(Color color) const;
+};
+
 class Fragment : public DrawItem
 {
 private:
-    //TODO Fragment appearance
+    Sprite* sprite;
+    Color color;
+
     enum class PortIndex
     {
         UP = 0,
@@ -17,9 +29,8 @@ private:
     };
     bool availablePorts[4];
 
-    Color color;
 public:
-    explicit Fragment(Color color);
+    explicit Fragment(Sprite* sprite, Color color);
 
     Vector2 size() const override;
 
@@ -34,8 +45,12 @@ private:
     std::map<Coord, Fragment> fragments;
     unsigned width;
     unsigned height;
+
+    Sprite* tile4Sprite;
 public:
     Mosaic(unsigned width, unsigned height);
+
+    ~Mosaic() override;
 
     Vector2 size() const override;
 

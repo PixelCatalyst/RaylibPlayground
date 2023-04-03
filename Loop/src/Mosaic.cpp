@@ -7,14 +7,22 @@ Mosaic::Mosaic(unsigned width, unsigned height) :
         width(width),
         height(height)
 {
-    Color colors[4]{
-            SKYBLUE, LIME, PURPLE, RED
-    };
+    tile4Sprite = new Sprite();
+
+    const Color color = BEIGE;
     for (unsigned y = 0; y < height; ++y) {
         for (unsigned x = 0; x < width; ++x) {
-            fragments.insert(std::make_pair(Coord{x, y}, Fragment(colors[(y * width + x) % 3])));
+            fragments.insert(std::make_pair(
+                    Coord{x, y},
+                    Fragment(tile4Sprite, color)
+            ));
         }
     }
+}
+
+Mosaic::~Mosaic()
+{
+    delete tile4Sprite;
 }
 
 void Mosaic::draw() const
@@ -30,39 +38,35 @@ void Mosaic::draw() const
 
 Vector2 Mosaic::size() const
 {
-    return Vector2{static_cast<float>(width) * 50.0f, static_cast<float>(height) * 50.0f};
+    return Vector2{static_cast<float>(width) * 100.0f, static_cast<float>(height) * 100.0f};
 }
 
-void Fragment::draw() const
+Fragment::Fragment(Sprite* sprite, Color color) :
+        sprite{sprite},
+        color{color}
 {
-    DrawRectangle(0, 0, 50, 50, color);
-    Color inverted{
-            static_cast<unsigned char>(255 - color.r),
-            static_cast<unsigned char>(255 - color.g),
-            static_cast<unsigned char>(255 - color.b),
-            color.a
-    };
-    if (availablePorts[static_cast<int>(PortIndex::UP)]) {
-        DrawCircle(25, 3, 3, inverted);
-    }
-    if (availablePorts[static_cast<int>(PortIndex::RIGHT)]) {
-        DrawCircle(47, 25, 3, inverted);
-    }
-    if (availablePorts[static_cast<int>(PortIndex::DOWN)]) {
-        DrawCircle(25, 47, 3, inverted);
-    }
-    if (availablePorts[static_cast<int>(PortIndex::LEFT)]) {
-        DrawCircle(3, 25, 3, inverted);
-    }
+    availablePorts[0] = availablePorts[1] = availablePorts[2] = availablePorts[3] = true;
 }
 
 Vector2 Fragment::size() const
 {
-    return Vector2{50.0f, 50.0f};
+    return Vector2{100.0f, 100.0f};
 }
 
-Fragment::Fragment(Color color) :
-        color{color}
+void Fragment::draw() const
 {
-    availablePorts[0] = availablePorts[1] = availablePorts[2] = availablePorts[3] = true;
+    sprite->draw(color);
+}
+
+Sprite::Sprite()
+{
+    texture = LoadTexture("assets/tiles/tile4.png");
+}
+
+void Sprite::draw(Color color) const
+{
+    rlPushMatrix();
+    rlScalef(0.5, 0.5, 1);
+    DrawTexture(texture, 0, 0, color);
+    rlPopMatrix();
 }
