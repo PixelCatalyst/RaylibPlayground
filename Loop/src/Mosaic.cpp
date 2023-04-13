@@ -38,7 +38,7 @@ void Mosaic::draw() const
 
 Vector2 Mosaic::size() const
 {
-    return Vector2{static_cast<float>(width) * 100.0f, static_cast<float>(height) * 100.0f};
+    return Vector2{static_cast<float>(width) * 80.0f, static_cast<float>(height) * 80.0f};
 }
 
 Fragment::Fragment(Sprite* sprite, Color color) :
@@ -50,7 +50,7 @@ Fragment::Fragment(Sprite* sprite, Color color) :
 
 Vector2 Fragment::size() const
 {
-    return Vector2{100.0f, 100.0f};
+    return Vector2{80.0f, 80.0f};
 }
 
 void Fragment::draw() const
@@ -66,7 +66,6 @@ Sprite::Sprite()
 void Sprite::draw(Color color) const
 {
     rlPushMatrix();
-    rlScalef(0.5, 0.5, 1);
     DrawTexture(texture, 0, 0, color);
     rlPopMatrix();
 }

@@ -6,10 +6,10 @@ App::App() = default;
 
 void App::init()
 {
-    InitWindow(600, 800, "Loop");
+    InitWindow(700, 700, "Loop");
     SetTargetFPS(60);
 
-    mosaic = new Mosaic(4, 4);
+    mosaic = new Mosaic(8, 8);
 }
 
 bool App::isRunning()
