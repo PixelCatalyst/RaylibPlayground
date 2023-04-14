@@ -2,6 +2,7 @@
 
 #include "DrawUtils.h"
 
+#include <string>
 #include <map>
 
 class Sprite
@@ -9,7 +10,7 @@ class Sprite
 private:
     Texture2D texture;
 public:
-    explicit Sprite();
+    explicit Sprite(const std::string& fileName);
 
     void draw(Color color) const;
 };
@@ -46,6 +47,10 @@ private:
     unsigned width;
     unsigned height;
 
+    Sprite* tile1Sprite;
+    Sprite* tile2aSprite;
+    Sprite* tile2bSprite;
+    Sprite* tile3Sprite;
     Sprite* tile4Sprite;
 public:
     Mosaic(unsigned width, unsigned height);

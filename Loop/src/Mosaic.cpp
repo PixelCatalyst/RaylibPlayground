@@ -7,14 +7,26 @@ Mosaic::Mosaic(unsigned width, unsigned height) :
         width(width),
         height(height)
 {
-    tile4Sprite = new Sprite();
+    tile1Sprite = new Sprite("assets/tiles/tile1.png");
+    tile2aSprite = new Sprite("assets/tiles/tile2a.png");
+    tile2bSprite = new Sprite("assets/tiles/tile2b.png");
+    tile3Sprite = new Sprite("assets/tiles/tile3.png");
+    tile4Sprite = new Sprite("assets/tiles/tile4.png");
+
+    Sprite* sprites[5] = {
+            tile1Sprite,
+            tile3Sprite,
+            tile2aSprite,
+            tile4Sprite,
+            tile2bSprite
+    };
 
     const Color color = BEIGE;
     for (unsigned y = 0; y < height; ++y) {
         for (unsigned x = 0; x < width; ++x) {
             fragments.insert(std::make_pair(
                     Coord{x, y},
-                    Fragment(tile4Sprite, color)
+                    Fragment(sprites[(y * width + x) % 5], color)
             ));
         }
     }
@@ -22,6 +34,10 @@ Mosaic::Mosaic(unsigned width, unsigned height) :
 
 Mosaic::~Mosaic()
 {
+    delete tile1Sprite;
+    delete tile2aSprite;
+    delete tile2bSprite;
+    delete tile3Sprite;
     delete tile4Sprite;
 }
 
@@ -58,9 +74,9 @@ void Fragment::draw() const
     sprite->draw(color);
 }
 
-Sprite::Sprite()
+Sprite::Sprite(const std::string& fileName)
 {
-    texture = LoadTexture("assets/tiles/tile4.png");
+    texture = LoadTexture(fileName.c_str());
 }
 
 void Sprite::draw(Color color) const
