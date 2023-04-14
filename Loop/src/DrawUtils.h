@@ -5,9 +5,9 @@
 class DrawItem
 {
 public:
-    virtual void draw() const = 0;
-
     virtual Vector2 size() const;
+
+    virtual void draw() const = 0;
 
     virtual ~DrawItem()
     {

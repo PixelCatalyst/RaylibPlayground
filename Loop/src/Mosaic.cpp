@@ -41,6 +41,11 @@ Mosaic::~Mosaic()
     delete tile4Sprite;
 }
 
+Vector2 Mosaic::size() const
+{
+    return Vector2{static_cast<float>(width) * 80.0f, static_cast<float>(height) * 80.0f};
+}
+
 void Mosaic::draw() const
 {
     for (auto& [coord, frag]: tiles) {
@@ -50,38 +55,4 @@ void Mosaic::draw() const
         frag.draw();
         rlPopMatrix();
     }
-}
-
-Vector2 Mosaic::size() const
-{
-    return Vector2{static_cast<float>(width) * 80.0f, static_cast<float>(height) * 80.0f};
-}
-
-Tile::Tile(Sprite* sprite, Color color) :
-        sprite{sprite},
-        color{color}
-{
-    availablePorts[0] = availablePorts[1] = availablePorts[2] = availablePorts[3] = true;
-}
-
-Vector2 Tile::size() const
-{
-    return Vector2{80.0f, 80.0f};
-}
-
-void Tile::draw() const
-{
-    sprite->draw(color);
-}
-
-Sprite::Sprite(const std::string& fileName)
-{
-    texture = LoadTexture(fileName.c_str());
-}
-
-void Sprite::draw(Color color) const
-{
-    rlPushMatrix();
-    DrawTexture(texture, 0, 0, color);
-    rlPopMatrix();
 }
