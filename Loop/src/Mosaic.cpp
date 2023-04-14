@@ -24,9 +24,9 @@ Mosaic::Mosaic(unsigned width, unsigned height) :
     const Color color = BEIGE;
     for (unsigned y = 0; y < height; ++y) {
         for (unsigned x = 0; x < width; ++x) {
-            fragments.insert(std::make_pair(
+            tiles.insert(std::make_pair(
                     Coord{x, y},
-                    Fragment(sprites[(y * width + x) % 5], color)
+                    Tile(sprites[(y * width + x) % 5], color)
             ));
         }
     }
@@ -43,7 +43,7 @@ Mosaic::~Mosaic()
 
 void Mosaic::draw() const
 {
-    for (auto& [coord, frag]: fragments) {
+    for (auto& [coord, frag]: tiles) {
         const Vector2 fragSize = frag.size();
         rlPushMatrix();
         rlTranslatef(coord.first * fragSize.x, coord.second * fragSize.y, 0);
@@ -57,19 +57,19 @@ Vector2 Mosaic::size() const
     return Vector2{static_cast<float>(width) * 80.0f, static_cast<float>(height) * 80.0f};
 }
 
-Fragment::Fragment(Sprite* sprite, Color color) :
+Tile::Tile(Sprite* sprite, Color color) :
         sprite{sprite},
         color{color}
 {
     availablePorts[0] = availablePorts[1] = availablePorts[2] = availablePorts[3] = true;
 }
 
-Vector2 Fragment::size() const
+Vector2 Tile::size() const
 {
     return Vector2{80.0f, 80.0f};
 }
 
-void Fragment::draw() const
+void Tile::draw() const
 {
     sprite->draw(color);
 }

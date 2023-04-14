@@ -15,7 +15,7 @@ public:
     void draw(Color color) const;
 };
 
-class Fragment : public DrawItem
+class Tile : public DrawItem
 {
 private:
     Sprite* sprite;
@@ -31,7 +31,7 @@ private:
     bool availablePorts[4];
 
 public:
-    explicit Fragment(Sprite* sprite, Color color);
+    explicit Tile(Sprite* sprite, Color color);
 
     Vector2 size() const override;
 
@@ -43,7 +43,7 @@ using Coord = std::pair<unsigned, unsigned>;
 class Mosaic : public DrawItem
 {
 private:
-    std::map<Coord, Fragment> fragments;
+    std::map<Coord, Tile> tiles;
     unsigned width;
     unsigned height;
 
