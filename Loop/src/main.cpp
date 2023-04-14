@@ -1,16 +1,15 @@
-#include <raylib.h>
+#include "App.h"
 
 int main()
 {
-    InitWindow(600, 800, "Loop");
+    App app;
+    app.init();
 
-    while (!WindowShouldClose()) {
-        BeginDrawing();
-        ClearBackground(RAYWHITE);
-        EndDrawing();
+    while (app.isRunning()) {
+        app.update();
+        app.draw();
     }
 
-    CloseWindow();
-
+    app.close();
     return 0;
 }
