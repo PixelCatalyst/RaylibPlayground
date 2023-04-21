@@ -2,7 +2,7 @@
 
 #include <raylib.h>
 
-#include "DrawUtils.h"
+#include "DrawItem.h"
 #include "Sprite.h"
 
 class Tile : public DrawItem
@@ -23,7 +23,7 @@ private:
 public:
     explicit Tile(Sprite* sprite, Color color);
 
-    Vector2 size() const override;
+    static float size();
 
     void draw() const override;
 };

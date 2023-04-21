@@ -1,6 +1,6 @@
 #include "App.h"
 
-#include "DrawUtils.h"
+#include "DrawItem.h"
 
 App::App() = default;
 
@@ -32,7 +32,11 @@ void App::draw()
     BeginDrawing();
     ClearBackground(RAYWHITE);
 
-    DrawUtils::drawCentered(*mosaic);
+    const Vector2 renderSize{
+            static_cast<float>(GetRenderWidth()),
+            static_cast<float>(GetRenderHeight())
+    };
+    mosaic->drawCentered(renderSize);
 
     EndDrawing();
 }

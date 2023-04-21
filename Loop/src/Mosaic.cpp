@@ -41,18 +41,25 @@ Mosaic::~Mosaic()
     delete tile4Sprite;
 }
 
-Vector2 Mosaic::size() const
+void Mosaic::drawCentered(const Vector2& viewportSize) const
 {
-    return Vector2{static_cast<float>(width) * 80.0f, static_cast<float>(height) * 80.0f};
+    const Vector2 mosaicSize{
+            static_cast<float>(width) * Tile::size(),
+            static_cast<float>(height) * Tile::size()
+    };
+    rlPushMatrix();
+    rlTranslatef((viewportSize.x - mosaicSize.x) / 2.0f, (viewportSize.y - mosaicSize.y) / 2.0f, 0);
+    drawTiles();
+    rlPopMatrix();
 }
 
-void Mosaic::draw() const
+void Mosaic::drawTiles() const
 {
-    for (auto& [coord, frag]: tiles) {
-        const Vector2 fragSize = frag.size();
+    const float tileSize = Tile::size();
+    for (auto& [coord, tile]: tiles) {
         rlPushMatrix();
-        rlTranslatef(coord.first * fragSize.x, coord.second * fragSize.y, 0);
-        frag.draw();
+        rlTranslatef(coord.first * tileSize, coord.second * tileSize, 0);
+        tile.draw();
         rlPopMatrix();
     }
 }
