@@ -3,42 +3,18 @@
 #include <raylib.h>
 #include <rlgl.h>
 
-Mosaic::Mosaic(unsigned width, unsigned height) :
+Mosaic::Mosaic(const TileFactory& tileFactory, unsigned width, unsigned height) :
         width(width),
         height(height)
 {
-    tile1Sprite = new Sprite("assets/tiles/tile1.png");
-    tile2aSprite = new Sprite("assets/tiles/tile2a.png");
-    tile2bSprite = new Sprite("assets/tiles/tile2b.png");
-    tile3Sprite = new Sprite("assets/tiles/tile3.png");
-    tile4Sprite = new Sprite("assets/tiles/tile4.png");
-
-    Sprite* sprites[5] = {
-            tile1Sprite,
-            tile3Sprite,
-            tile2aSprite,
-            tile4Sprite,
-            tile2bSprite
-    };
-
-    const Color color = BEIGE;
     for (unsigned y = 0; y < height; ++y) {
         for (unsigned x = 0; x < width; ++x) {
             tiles.insert(std::make_pair(
                     Coord{x, y},
-                    Tile(sprites[(y * width + x) % 5], color)
+                    tileFactory.create(PortSet::of({Port::up(), Port::right(), Port::down()}))
             ));
         }
     }
-}
-
-Mosaic::~Mosaic()
-{
-    delete tile1Sprite;
-    delete tile2aSprite;
-    delete tile2bSprite;
-    delete tile3Sprite;
-    delete tile4Sprite;
 }
 
 void Mosaic::drawCentered(const Vector2& viewportSize) const

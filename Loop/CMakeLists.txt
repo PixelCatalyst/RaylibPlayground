@@ -5,6 +5,9 @@ add_executable(
         src/Mosaic.cpp
         src/Tile.cpp
         src/Sprite.cpp
+        src/SpriteLoader.cpp
+        src/TileFactory.cpp
+        src/TileDefinition.cpp
 )
 
 enable_raylib(Loop)

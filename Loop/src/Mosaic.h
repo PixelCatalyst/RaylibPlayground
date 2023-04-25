@@ -3,6 +3,7 @@
 #include <map>
 
 #include "DrawItem.h"
+#include "TileFactory.h"
 #include "Tile.h"
 #include "Sprite.h"
 
@@ -15,18 +16,10 @@ private:
     const unsigned width;
     const unsigned height;
 
-    Sprite* tile1Sprite;
-    Sprite* tile2aSprite;
-    Sprite* tile2bSprite;
-    Sprite* tile3Sprite;
-    Sprite* tile4Sprite;
-
     void drawTiles() const;
 
 public:
-    Mosaic(unsigned width, unsigned height);
-
-    ~Mosaic();
+    Mosaic(const TileFactory& tileFactory, unsigned width, unsigned height);
 
     void drawCentered(const Vector2& viewportSize) const;
 };

@@ -9,7 +9,11 @@ void App::init()
     InitWindow(700, 700, "Loop");
     SetTargetFPS(60);
 
-    mosaic = new Mosaic(8, 8);
+    spriteLoader = new SpriteLoader();
+    tileDefinition = new TileDefinition(*spriteLoader);
+    tileDefinition->initFromFile();
+    tileFactory = new TileFactory(*tileDefinition, *spriteLoader);
+    mosaic = new Mosaic(*tileFactory, 8, 8);
 }
 
 bool App::isRunning()
@@ -41,12 +45,12 @@ void App::draw()
     EndDrawing();
 }
 
-void App::close()
+void App::shutdown()
 {
     CloseWindow();
-}
 
-App::~App()
-{
+    delete spriteLoader;
+    delete tileDefinition;
+    delete tileFactory;
     delete mosaic;
 }

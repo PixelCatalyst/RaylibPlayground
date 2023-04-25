@@ -2,9 +2,9 @@
 
 #include "Sprite.h"
 
-Sprite::Sprite(const std::string& fileName)
+Sprite::Sprite(const Texture2D& texture) :
+        texture{texture}
 {
-    texture = LoadTexture(fileName.c_str());
 }
 
 void Sprite::draw(Color color) const

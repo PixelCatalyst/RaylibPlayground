@@ -10,6 +10,6 @@ int main()
         app.draw();
     }
 
-    app.close();
+    app.shutdown();
     return 0;
 }
