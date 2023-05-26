@@ -5,7 +5,7 @@
 
 #include "Mosaic.h"
 #include "SpriteLoader.h"
-#include "TileDefinition.h"
+#include "TileDefinitionLoader.h"
 #include "TileFactory.h"
 
 struct GameState
@@ -18,10 +18,9 @@ class App
 private:
     GameState gameState;
 
-    SpriteLoader* spriteLoader;
-    TileDefinition* tileDefinition;
-    TileFactory* tileFactory;
-    Mosaic* mosaic;
+    SpriteLoader* spriteLoader{nullptr};
+    TileFactory* tileFactory{nullptr};
+    Mosaic* mosaic{nullptr};
 public:
     explicit App();
 

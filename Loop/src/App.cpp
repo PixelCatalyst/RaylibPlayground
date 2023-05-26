@@ -10,9 +10,8 @@ void App::init()
     SetTargetFPS(60);
 
     spriteLoader = new SpriteLoader();
-    tileDefinition = new TileDefinition(*spriteLoader);
-    tileDefinition->initFromFile();
-    tileFactory = new TileFactory(*tileDefinition, *spriteLoader);
+    tileFactory = new TileFactory(*spriteLoader);
+    tileFactory->initResources();
     mosaic = new Mosaic(*tileFactory, 8, 8);
 }
 
@@ -50,7 +49,6 @@ void App::shutdown()
     CloseWindow();
 
     delete spriteLoader;
-    delete tileDefinition;
     delete tileFactory;
     delete mosaic;
 }

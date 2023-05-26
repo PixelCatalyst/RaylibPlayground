@@ -1,15 +1,18 @@
 #pragma once
 
-#include "TileDefinition.h"
+#include "TileDefinitionLoader.h"
 #include "Tile.h"
 
 class TileFactory
 {
 private:
-    const TileDefinition& tileDefinition;
     SpriteLoader& spriteLoader;
+
+    TileDefinition tileDef;
 public:
-    explicit TileFactory(const TileDefinition& tileDefinition, SpriteLoader& spriteLoader);
+    explicit TileFactory(SpriteLoader& spriteLoader);
+
+    void initResources();
 
     Tile create(PortSet portSet) const;
 };
