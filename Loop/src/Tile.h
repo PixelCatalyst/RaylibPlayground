@@ -142,4 +142,6 @@ public:
     static float size();
 
     void draw() const override;
+
+    void rotate();
 };

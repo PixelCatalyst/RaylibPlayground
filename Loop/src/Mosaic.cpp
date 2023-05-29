@@ -88,3 +88,11 @@ void Mosaic::drawTiles() const
         rlPopMatrix();
     }
 }
+
+void Mosaic::rotateTile(unsigned x, unsigned y)
+{
+    auto it = tiles.find({x, y});
+    if (it != tiles.end()) {
+        it->second.rotate();
+    }
+}

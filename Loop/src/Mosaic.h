@@ -22,4 +22,6 @@ public:
     Mosaic(const TileFactory& tileFactory, unsigned width, unsigned height);
 
     void drawCentered(const Vector2& viewportSize) const;
+
+    void rotateTile(unsigned x, unsigned y);
 };

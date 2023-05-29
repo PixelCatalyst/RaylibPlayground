@@ -26,3 +26,9 @@ void Tile::draw() const
     sprite->draw(color);
     rlPopMatrix();
 }
+
+void Tile::rotate()
+{
+    portSet.rotate();
+    rotation = (rotation + 1) % 4;
+}

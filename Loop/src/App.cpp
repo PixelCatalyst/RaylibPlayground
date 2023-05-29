@@ -27,6 +27,8 @@ void App::update()
     gameState.angle += degreesPerSecond * deltaSeconds;
     if (gameState.angle >= 360.0f) {
         gameState.angle = gameState.angle - 360.0f;
+
+        mosaic->rotateTile(3, 3);
     }
 }
 
