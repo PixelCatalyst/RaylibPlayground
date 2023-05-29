@@ -75,10 +75,22 @@ public:
 class PortSet
 {
 private:
-    bool portUp{false};
-    bool portRight{false};
-    bool portDown{false};
-    bool portLeft{false};
+    bool ports[4] = {false};
+
+    int portToIndex(Port port)
+    {
+        if (port == Port::up()) {
+            return 0;
+        } else if (port == Port::right()) {
+            return 1;
+        } else if (port == Port::down()) {
+            return 2;
+        } else if (port == Port::left()) {
+            return 3;
+        }
+        return -1;
+    }
+
 public:
     static PortSet of(std::initializer_list<Port> ports)
     {
@@ -91,30 +103,27 @@ public:
 
     void add(Port port)
     {
-        if (port == Port::up()) {
-            portUp = true;
-        } else if (port == Port::right()) {
-            portRight = true;
-        } else if (port == Port::down()) {
-            portDown = true;
-        } else if (port == Port::left()) {
-            portLeft = true;
+        int index = portToIndex(port);
+        if (index >= 0) {
+            ports[index] = true;
         }
+    }
+
+    void rotate()
+    {
+        bool tmp = ports[3];
+        ports[3] = ports[2];
+        ports[2] = ports[1];
+        ports[1] = ports[0];
+        ports[0] = tmp;
     }
 
     bool operator<(const PortSet& other) const
     {
-        if (portUp != other.portUp) {
-            return portUp < other.portUp;
-        }
-        if (portRight != other.portRight) {
-            return portRight < other.portRight;
-        }
-        if (portDown != other.portDown) {
-            return portDown < other.portDown;
-        }
-        if (portLeft != other.portLeft) {
-            return portLeft < other.portLeft;
+        for (int i = 0; i < 4; ++i) {
+            if (ports[i] != other.ports[i]) {
+                return ports[i] < other.ports[i];
+            }
         }
         return false;
     }
@@ -123,13 +132,12 @@ public:
 class Tile : public DrawItem
 {
 private:
+    PortSet portSet;
     Sprite* sprite;
     Color color;
-
-    bool availablePorts[4] = {false};
-
+    int rotation;
 public:
-    explicit Tile(Sprite* sprite, Color color);
+    explicit Tile(PortSet portSet, Sprite* sprite, Color color, int rotation);
 
     static float size();
 

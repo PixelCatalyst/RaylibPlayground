@@ -45,7 +45,7 @@ void TileDefinitionLoader::parseLine(Context& context, SpriteLoader& spriteLoade
             portSet.add(port);
         }
     }
-    context.tileDef.insert(portSet, friendlyId, 0);
+    context.tileDef.populateTile(portSet, friendlyId);
 }
 
 void TileDefinitionLoader::unloadDefFileText(Context& context)
@@ -54,9 +54,12 @@ void TileDefinitionLoader::unloadDefFileText(Context& context)
     context.currentDefFileText = nullptr;
 }
 
-void TileDefinition::insert(PortSet portSet, const std::string& friendlyId, int rotation)
+void TileDefinition::populateTile(PortSet portSet, const std::string& friendlyId)
 {
-    portsToSprite.insert({portSet, std::make_pair(friendlyId, rotation)});
+    for (int i = 0; i < 4; ++i) {
+        portsToSprite.insert({portSet, std::make_pair(friendlyId, i)});
+        portSet.rotate();
+    }
 }
 
 std::pair<std::string, int> TileDefinition::findByPortSet(PortSet portSet) const

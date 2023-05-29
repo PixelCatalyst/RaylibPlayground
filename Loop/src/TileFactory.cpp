@@ -13,5 +13,5 @@ void TileFactory::initResources()
 Tile TileFactory::create(PortSet portSet) const
 {
     auto [spriteId, rotation] = tileDef.findByPortSet(portSet);
-    return Tile(spriteLoader.getSprite(spriteId), BEIGE);
+    return Tile(portSet, spriteLoader.getSprite(spriteId), BEIGE, rotation);
 }

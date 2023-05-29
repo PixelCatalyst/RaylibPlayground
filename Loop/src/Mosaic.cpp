@@ -11,7 +11,7 @@ Mosaic::Mosaic(const TileFactory& tileFactory, unsigned width, unsigned height) 
         for (unsigned x = 0; x < width; ++x) {
             tiles.insert(std::make_pair(
                     Coord{x, y},
-                    tileFactory.create(PortSet::of({Port::up(), Port::right(), Port::down()}))
+                    tileFactory.create(PortSet::of({Port::right()}))
             ));
         }
     }

@@ -3,9 +3,11 @@
 
 #include "Tile.h"
 
-Tile::Tile(Sprite* sprite, Color color) :
+Tile::Tile(PortSet portSet, Sprite* sprite, Color color, int rotation) :
+        portSet{portSet},
         sprite{sprite},
-        color{color}
+        color{color},
+        rotation{rotation}
 {
 }
 
@@ -16,5 +18,11 @@ float Tile::size()
 
 void Tile::draw() const
 {
+    float halfSize = Tile::size() / 2.0f;
+    rlPushMatrix();
+    rlTranslatef(halfSize, halfSize, 0);
+    rlRotatef(90.0f * rotation, 0, 0, 1);
+    rlTranslatef(-halfSize, -halfSize, 0);
     sprite->draw(color);
+    rlPopMatrix();
 }

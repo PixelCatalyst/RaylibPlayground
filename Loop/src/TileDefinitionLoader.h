@@ -4,6 +4,7 @@
 #include "SpriteLoader.h"
 
 #include <map>
+#include <vector>
 
 class TileDefinition
 {
@@ -11,7 +12,7 @@ private:
     using SpriteIdWithRotation = std::pair<std::string, int>;
     std::map<PortSet, SpriteIdWithRotation> portsToSprite;
 public:
-    void insert(PortSet portSet, const std::string& friendlyId, int rotation);
+    void populateTile(PortSet portSet, const std::string& friendlyId);
 
     std::pair<std::string, int> findByPortSet(PortSet portSet) const;
 };
