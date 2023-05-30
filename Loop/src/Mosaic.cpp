@@ -66,6 +66,19 @@ Mosaic::Mosaic(const TileFactory& tileFactory, unsigned width, unsigned height) 
     }
 }
 
+void Mosaic::onLeftClick(const Vector2& mousePos, const Vector2& viewportSize)
+{
+    const Vector2 mosaicSize{
+            static_cast<float>(width) * Tile::size(),
+            static_cast<float>(height) * Tile::size()
+    };
+    const Vector2 alignedMousePos{
+            mousePos.x - ((viewportSize.x - mosaicSize.x) / 2.0f),
+            mousePos.y - ((viewportSize.y - mosaicSize.y) / 2.0f)
+    };
+    rotateTile(alignedMousePos.x / Tile::size(), alignedMousePos.y / Tile::size());
+}
+
 void Mosaic::drawCentered(const Vector2& viewportSize) const
 {
     const Vector2 mosaicSize{

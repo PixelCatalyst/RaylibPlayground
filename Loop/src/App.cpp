@@ -27,8 +27,15 @@ void App::update()
     gameState.angle += degreesPerSecond * deltaSeconds;
     if (gameState.angle >= 360.0f) {
         gameState.angle = gameState.angle - 360.0f;
+    }
 
-        mosaic->rotateTile(3, 3);
+    const Vector2 renderSize{
+            static_cast<float>(GetRenderWidth()),
+            static_cast<float>(GetRenderHeight())
+    };
+    Vector2 mousePos = GetMousePosition();
+    if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+        mosaic->onLeftClick(mousePos, renderSize);
     }
 }
 

@@ -21,6 +21,8 @@ private:
 public:
     Mosaic(const TileFactory& tileFactory, unsigned width, unsigned height);
 
+    void onLeftClick(const Vector2& mousePos, const Vector2& viewportSize);
+
     void drawCentered(const Vector2& viewportSize) const;
 
     void rotateTile(unsigned x, unsigned y);
