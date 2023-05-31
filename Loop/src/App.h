@@ -5,7 +5,7 @@
 
 #include "Mosaic.h"
 #include "SpriteLoader.h"
-#include "TileDefinitionLoader.h"
+#include "TileDefinition.h"
 #include "TileFactory.h"
 
 struct GameState

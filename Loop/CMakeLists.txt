@@ -7,7 +7,8 @@ add_executable(
         src/Sprite.cpp
         src/SpriteLoader.cpp
         src/TileFactory.cpp
-        src/TileDefinitionLoader.cpp
+        src/TileDefinition.cpp
+        src/Port.cpp
 )
 
 enable_raylib(Loop)

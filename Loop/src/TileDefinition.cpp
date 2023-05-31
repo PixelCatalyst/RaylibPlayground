@@ -1,4 +1,4 @@
-#include "TileDefinitionLoader.h"
+#include "TileDefinition.h"
 
 #include <raylib.h>
 

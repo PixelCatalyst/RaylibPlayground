@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TileDefinitionLoader.h"
+#include "TileDefinition.h"
 #include "Tile.h"
 
 class TileFactory
