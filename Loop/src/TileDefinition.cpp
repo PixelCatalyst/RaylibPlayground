@@ -30,11 +30,11 @@ void TileDefinitionLoader::parseLine(Context& context, SpriteLoader& spriteLoade
     size_t dotPos = context.token.find_last_of('.');
     std::string friendlyId = context.token.substr(0, dotPos);
     if (spriteLoader.getSprite(friendlyId) != nullptr) {
-        //TODO warning, tile redefinition
+        TraceLog(LOG_WARNING, "Detected definition of already used tile sprite, can produce unexpected results");
     }
     spriteLoader.loadSprite(friendlyId, context.tilesBasePath + context.token);
     if (spriteLoader.getSprite(friendlyId) == nullptr) {
-        //TODO fatal error, could not load sprite
+        TraceLog(LOG_FATAL, "Unable to parse tile definition because given sprite was not loaded");
     }
     PortSet portSet;
     while (lineStream >> context.token) {
@@ -66,8 +66,7 @@ std::pair<std::string, int> TileDefinition::findByPortSet(PortSet portSet) const
 {
     auto it = portsToSprite.find(portSet);
     if (it == portsToSprite.end()) {
-        //TODO handle missing sprite error (should never happen in nominal conditions but should be handled anyway)
-        TraceLog(LOG_ERROR, "No sprite for given port set");
+        TraceLog(LOG_FATAL, "Unable to find sprite for given tile port set, tile definition seems incomplete");
     }
     return it->second;
 }

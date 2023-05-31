@@ -5,6 +5,8 @@
 
 #include "Sprite.h"
 
+// TODO Consider using spriteId value objects
+// TODO Consider using default (error) sprite in case of missing asset
 class SpriteLoader
 {
 private:
