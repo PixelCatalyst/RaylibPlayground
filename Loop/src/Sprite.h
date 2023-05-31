@@ -9,7 +9,7 @@ class Sprite
 private:
     Texture2D texture;
 public:
-    explicit Sprite(const std::string& fileName);
+    explicit Sprite(const Texture2D& texture);
 
     void draw(Color color) const;
 };

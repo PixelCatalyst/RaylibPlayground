@@ -1,6 +1,6 @@
 #include "App.h"
 
-#include "DrawUtils.h"
+#include "DrawItem.h"
 
 App::App() = default;
 
@@ -9,7 +9,10 @@ void App::init()
     InitWindow(700, 700, "Loop");
     SetTargetFPS(60);
 
-    mosaic = new Mosaic(8, 8);
+    spriteLoader = new SpriteLoader();
+    tileFactory = new TileFactory(*spriteLoader);
+    tileFactory->initResources();
+    mosaic = new Mosaic(*tileFactory, 8, 8);
 }
 
 bool App::isRunning()
@@ -25,6 +28,15 @@ void App::update()
     if (gameState.angle >= 360.0f) {
         gameState.angle = gameState.angle - 360.0f;
     }
+
+    const Vector2 renderSize{
+            static_cast<float>(GetRenderWidth()),
+            static_cast<float>(GetRenderHeight())
+    };
+    Vector2 mousePos = GetMousePosition();
+    if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
+        mosaic->onLeftClick(mousePos, renderSize);
+    }
 }
 
 void App::draw()
@@ -32,17 +44,20 @@ void App::draw()
     BeginDrawing();
     ClearBackground(RAYWHITE);
 
-    DrawUtils::drawCentered(*mosaic);
+    const Vector2 renderSize{
+            static_cast<float>(GetRenderWidth()),
+            static_cast<float>(GetRenderHeight())
+    };
+    mosaic->drawCentered(renderSize);
 
     EndDrawing();
 }
 
-void App::close()
+void App::shutdown()
 {
     CloseWindow();
-}
 
-App::~App()
-{
+    delete spriteLoader;
+    delete tileFactory;
     delete mosaic;
 }

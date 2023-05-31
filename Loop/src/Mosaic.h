@@ -2,30 +2,28 @@
 
 #include <map>
 
-#include "DrawUtils.h"
+#include "DrawItem.h"
+#include "TileFactory.h"
 #include "Tile.h"
 #include "Sprite.h"
 
 using Coord = std::pair<unsigned, unsigned>;
 
-class Mosaic : public DrawItem
+class Mosaic
 {
 private:
     std::map<Coord, Tile> tiles;
-    unsigned width;
-    unsigned height;
+    const unsigned width;
+    const unsigned height;
 
-    Sprite* tile1Sprite;
-    Sprite* tile2aSprite;
-    Sprite* tile2bSprite;
-    Sprite* tile3Sprite;
-    Sprite* tile4Sprite;
+    void drawTiles() const;
+
 public:
-    Mosaic(unsigned width, unsigned height);
+    Mosaic(const TileFactory& tileFactory, unsigned width, unsigned height);
 
-    ~Mosaic() override;
+    void onLeftClick(const Vector2& mousePos, const Vector2& viewportSize);
 
-    Vector2 size() const override;
+    void drawCentered(const Vector2& viewportSize) const;
 
-    void draw() const override;
+    void rotateTile(unsigned x, unsigned y);
 };

@@ -3,56 +3,109 @@
 #include <raylib.h>
 #include <rlgl.h>
 
-Mosaic::Mosaic(unsigned width, unsigned height) :
+Mosaic::Mosaic(const TileFactory& tileFactory, unsigned width, unsigned height) :
         width(width),
         height(height)
 {
-    tile1Sprite = new Sprite("assets/tiles/tile1.png");
-    tile2aSprite = new Sprite("assets/tiles/tile2a.png");
-    tile2bSprite = new Sprite("assets/tiles/tile2b.png");
-    tile3Sprite = new Sprite("assets/tiles/tile3.png");
-    tile4Sprite = new Sprite("assets/tiles/tile4.png");
-
-    Sprite* sprites[5] = {
-            tile1Sprite,
-            tile3Sprite,
-            tile2aSprite,
-            tile4Sprite,
-            tile2bSprite
-    };
-
-    const Color color = BEIGE;
+    const unsigned rightEnd = width - 1;
+    const unsigned downEnd = height - 1;
     for (unsigned y = 0; y < height; ++y) {
         for (unsigned x = 0; x < width; ++x) {
-            tiles.insert(std::make_pair(
-                    Coord{x, y},
-                    Tile(sprites[(y * width + x) % 5], color)
-            ));
+            if (x == 0 && y == 0) {
+                tiles.insert(std::make_pair(
+                        Coord{x, y},
+                        tileFactory.create(PortSet::of({Port::right(), Port::down()}))
+                ));
+            } else if (x == rightEnd && y == 0) {
+                tiles.insert(std::make_pair(
+                        Coord{x, y},
+                        tileFactory.create(PortSet::of({Port::left(), Port::down()}))
+                ));
+            } else if (x == 0 && y == downEnd) {
+                tiles.insert(std::make_pair(
+                        Coord{x, y},
+                        tileFactory.create(PortSet::of({Port::right(), Port::up()}))
+                ));
+            } else if (x == rightEnd && y == downEnd) {
+                tiles.insert(std::make_pair(
+                        Coord{x, y},
+                        tileFactory.create(PortSet::of({Port::left(), Port::up()}))
+                ));
+            } else if (x == 3 && y == 3) {
+                tiles.insert(std::make_pair(
+                        Coord{x, y},
+                        tileFactory.create(PortSet::of({Port::up()}))
+                ));
+            } else if (x == 0) {
+                tiles.insert(std::make_pair(
+                        Coord{x, y},
+                        tileFactory.create(PortSet::of({Port::right(), Port::up(), Port::down()}))
+                ));
+            } else if (x == rightEnd) {
+                tiles.insert(std::make_pair(
+                        Coord{x, y},
+                        tileFactory.create(PortSet::of({Port::left(), Port::up(), Port::down()}))
+                ));
+            } else if (y == 0) {
+                tiles.insert(std::make_pair(
+                        Coord{x, y},
+                        tileFactory.create(PortSet::of({Port::left(), Port::right(), Port::down()}))
+                ));
+            } else if (y == downEnd) {
+                tiles.insert(std::make_pair(
+                        Coord{x, y},
+                        tileFactory.create(PortSet::of({Port::left(), Port::right(), Port::up()}))
+                ));
+            } else {
+                tiles.insert(std::make_pair(
+                        Coord{x, y},
+                        tileFactory.create(PortSet::of({Port::left(), Port::right(), Port::down(), Port::up()}))
+                ));
+            }
         }
     }
 }
 
-Mosaic::~Mosaic()
+void Mosaic::onLeftClick(const Vector2& mousePos, const Vector2& viewportSize)
 {
-    delete tile1Sprite;
-    delete tile2aSprite;
-    delete tile2bSprite;
-    delete tile3Sprite;
-    delete tile4Sprite;
+    const Vector2 mosaicSize{
+            static_cast<float>(width) * Tile::size(),
+            static_cast<float>(height) * Tile::size()
+    };
+    const Vector2 alignedMousePos{
+            mousePos.x - ((viewportSize.x - mosaicSize.x) / 2.0f),
+            mousePos.y - ((viewportSize.y - mosaicSize.y) / 2.0f)
+    };
+    rotateTile(alignedMousePos.x / Tile::size(), alignedMousePos.y / Tile::size());
 }
 
-Vector2 Mosaic::size() const
+void Mosaic::drawCentered(const Vector2& viewportSize) const
 {
-    return Vector2{static_cast<float>(width) * 80.0f, static_cast<float>(height) * 80.0f};
+    const Vector2 mosaicSize{
+            static_cast<float>(width) * Tile::size(),
+            static_cast<float>(height) * Tile::size()
+    };
+    rlPushMatrix();
+    rlTranslatef((viewportSize.x - mosaicSize.x) / 2.0f, (viewportSize.y - mosaicSize.y) / 2.0f, 0);
+    drawTiles();
+    rlPopMatrix();
 }
 
-void Mosaic::draw() const
+void Mosaic::drawTiles() const
 {
-    for (auto& [coord, frag]: tiles) {
-        const Vector2 fragSize = frag.size();
+    const float tileSize = Tile::size();
+    for (auto& [coord, tile]: tiles) {
         rlPushMatrix();
-        rlTranslatef(coord.first * fragSize.x, coord.second * fragSize.y, 0);
-        frag.draw();
+        rlTranslatef(coord.first * tileSize, coord.second * tileSize, 0);
+        tile.draw();
         rlPopMatrix();
+    }
+}
+
+void Mosaic::rotateTile(unsigned x, unsigned y)
+{
+    auto it = tiles.find({x, y});
+    if (it != tiles.end()) {
+        it->second.rotate();
     }
 }
