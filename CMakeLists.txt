@@ -3,7 +3,7 @@ project(RaylibPlayground)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(RAYLIB_VERSION 4.2.0)
+set(RAYLIB_VERSION 4.5.0)
 
 include(FetchContent)
 
