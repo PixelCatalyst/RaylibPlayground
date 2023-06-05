@@ -6,6 +6,23 @@
 #include "Port.h"
 #include "Sprite.h"
 
+class Rotation
+{
+private:
+    float progress{0.0f};
+    Rotation* next{nullptr};
+public:
+    void update(float deltaSeconds);
+
+    bool isFinished() const;
+
+    void addNext(Rotation* next);
+
+    Rotation* getNext();
+
+    float getProgress() const;
+};
+
 class Tile : public DrawItem
 {
 private:
@@ -13,12 +30,19 @@ private:
     Sprite* sprite;
     Color color;
     int rotation;
+
+    Rotation* rot{nullptr};
+
+    void applyRotation();
+
 public:
     explicit Tile(PortSet portSet, Sprite* sprite, Color color, int rotation);
 
     static float size();
 
+    bool update(float deltaSeconds);
+
     void draw() const override;
 
-    void rotate();
+    void addRotation(Rotation* rot);
 };

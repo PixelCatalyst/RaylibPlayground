@@ -29,6 +29,8 @@ void App::update()
         gameState.angle = gameState.angle - 360.0f;
     }
 
+    mosaic->update(deltaSeconds);
+
     const Vector2 renderSize{
             static_cast<float>(GetRenderWidth()),
             static_cast<float>(GetRenderHeight())

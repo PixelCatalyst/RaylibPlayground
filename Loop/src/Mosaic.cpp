@@ -66,6 +66,18 @@ Mosaic::Mosaic(const TileFactory& tileFactory, unsigned width, unsigned height) 
     }
 }
 
+void Mosaic::update(float deltaSeconds)
+{
+    for (auto it = tilesToUpdate.begin(); it != tilesToUpdate.end();) {
+        auto tile = tiles.find(*it);
+        if (tile->second.update(deltaSeconds)) {
+            it = tilesToUpdate.erase(it);
+        } else {
+            ++it;
+        }
+    }
+}
+
 void Mosaic::onLeftClick(const Vector2& mousePos, const Vector2& viewportSize)
 {
     const Vector2 mosaicSize{
@@ -77,6 +89,17 @@ void Mosaic::onLeftClick(const Vector2& mousePos, const Vector2& viewportSize)
             mousePos.y - ((viewportSize.y - mosaicSize.y) / 2.0f)
     };
     rotateTile(alignedMousePos.x / Tile::size(), alignedMousePos.y / Tile::size());
+}
+
+void Mosaic::rotateTile(unsigned x, unsigned y)
+{
+    auto it = tiles.find({x, y});
+    if (it != tiles.end()) {
+        auto& [coord, tile] = *it;
+        auto* rot = new Rotation;
+        tilesToUpdate.insert(coord);
+        tile.addRotation(rot);
+    }
 }
 
 void Mosaic::drawCentered(const Vector2& viewportSize) const
@@ -99,13 +122,5 @@ void Mosaic::drawTiles() const
         rlTranslatef(coord.first * tileSize, coord.second * tileSize, 0);
         tile.draw();
         rlPopMatrix();
-    }
-}
-
-void Mosaic::rotateTile(unsigned x, unsigned y)
-{
-    auto it = tiles.find({x, y});
-    if (it != tiles.end()) {
-        it->second.rotate();
     }
 }
