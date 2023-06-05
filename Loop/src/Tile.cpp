@@ -3,11 +3,11 @@
 
 #include "Tile.h"
 
-Tile::Tile(PortSet portSet, Sprite* sprite, Color color, int rotation) :
+Tile::Tile(PortSet portSet, Sprite* sprite, Color color, int initialRotationPos) :
         portSet{portSet},
         sprite{sprite},
         color{color},
-        rotation{rotation}
+        baseRotationPos{initialRotationPos}
 {
 }
 
@@ -18,15 +18,16 @@ float Tile::size()
 
 bool Tile::update(float deltaSeconds)
 {
-    rot->update(deltaSeconds);
-    if (rot->isFinished()) {
-        Rotation* next = rot->getNext();
-        delete rot;
-        rot = next;
-        applyRotation();
-        return true;
+    if (rotation != nullptr) {
+        rotation->update(deltaSeconds);
+        if (rotation->isFinished()) {
+            Rotation* next = rotation->getNext();
+            delete rotation;
+            rotation = next;
+            applyRotation();
+        }
     }
-    return false;
+    return (rotation == nullptr);
 }
 
 void Tile::draw() const
@@ -34,9 +35,9 @@ void Tile::draw() const
     float halfSize = Tile::size() / 2.0f;
     rlPushMatrix();
     rlTranslatef(halfSize, halfSize, 0);
-    float angle = 90.0f * rotation;
-    if (rot != nullptr) {
-        angle += 90.0f * rot->getProgress();
+    float angle = 90.0f * static_cast<float>(baseRotationPos);
+    if (rotation != nullptr) {
+        angle += 90.0f * rotation->getProgress();
     }
     rlRotatef(angle, 0, 0, 1);
     rlTranslatef(-halfSize, -halfSize, 0);
@@ -47,15 +48,16 @@ void Tile::draw() const
 void Tile::applyRotation()
 {
     portSet.rotate();
-    rotation = (rotation + 1) % 4;
+    baseRotationPos = (baseRotationPos + 1) % 4;
 }
 
-void Tile::addRotation(Rotation* rot)
+void Tile::addRotation()
 {
-    if (this->rot == nullptr) {
-        this->rot = rot;
+    auto* nextRotation = new Rotation;
+    if (rotation == nullptr) {
+        rotation = nextRotation;
     } else {
-        rot->addNext(rot);
+        rotation->addNext(nextRotation);
     }
 }
 

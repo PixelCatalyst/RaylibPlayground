@@ -29,14 +29,14 @@ private:
     PortSet portSet;
     Sprite* sprite;
     Color color;
-    int rotation;
+    int baseRotationPos;
 
-    Rotation* rot{nullptr};
+    Rotation* rotation{nullptr};
 
     void applyRotation();
 
 public:
-    explicit Tile(PortSet portSet, Sprite* sprite, Color color, int rotation);
+    explicit Tile(PortSet portSet, Sprite* sprite, Color color, int initialRotationPos);
 
     static float size();
 
@@ -44,5 +44,5 @@ public:
 
     void draw() const override;
 
-    void addRotation(Rotation* rot);
+    void addRotation();
 };

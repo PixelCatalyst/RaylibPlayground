@@ -96,9 +96,8 @@ void Mosaic::rotateTile(unsigned x, unsigned y)
     auto it = tiles.find({x, y});
     if (it != tiles.end()) {
         auto& [coord, tile] = *it;
-        auto* rot = new Rotation;
         tilesToUpdate.insert(coord);
-        tile.addRotation(rot);
+        tile.addRotation();
     }
 }
 
