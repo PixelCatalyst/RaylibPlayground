@@ -11,6 +11,8 @@ class Rotation
 private:
     float progress{0.0f};
     Rotation* next{nullptr};
+
+    float calculateVelocity() const;
 public:
     void update(float deltaSeconds);
 

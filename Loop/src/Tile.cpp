@@ -61,10 +61,14 @@ void Tile::addRotation()
     }
 }
 
+float Rotation::calculateVelocity() const
+{
+    return (-20.0f * ((progress * progress) - progress) + 5.0f);
+}
+
 void Rotation::update(float deltaSeconds)
 {
-    const float speed = 5.0f;
-    const float increase = deltaSeconds * speed;
+    const float increase = deltaSeconds * calculateVelocity();
     progress = std::min(1.0f, progress + increase);
 }
 
