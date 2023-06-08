@@ -18,16 +18,15 @@ float Tile::size()
 
 bool Tile::update(float deltaSeconds)
 {
-    if (rotation != nullptr) {
-        rotation->update(deltaSeconds);
-        if (rotation->isFinished()) {
-            Rotation* next = rotation->getNext();
-            delete rotation;
-            rotation = next;
+    if (!rotations.empty()) {
+        Rotation& rotation = rotations.front();
+        rotation.update(deltaSeconds);
+        if (rotation.isFinished()) {
+            rotations.pop();
             applyRotation();
         }
     }
-    return (rotation == nullptr);
+    return rotations.empty();
 }
 
 void Tile::draw() const
@@ -36,8 +35,8 @@ void Tile::draw() const
     rlPushMatrix();
     rlTranslatef(halfSize, halfSize, 0);
     float angle = 90.0f * static_cast<float>(baseRotationPos);
-    if (rotation != nullptr) {
-        angle += 90.0f * rotation->getProgress();
+    if (!rotations.empty()) {
+        angle += 90.0f * rotations.front().getProgress();
     }
     rlRotatef(angle, 0, 0, 1);
     rlTranslatef(-halfSize, -halfSize, 0);
@@ -53,11 +52,8 @@ void Tile::applyRotation()
 
 void Tile::addRotation()
 {
-    auto* nextRotation = new Rotation;
-    if (rotation == nullptr) {
-        rotation = nextRotation;
-    } else {
-        rotation->addNext(nextRotation);
+    if (rotations.size() < 5) {
+        rotations.emplace();
     }
 }
 
@@ -75,20 +71,6 @@ void Rotation::update(float deltaSeconds)
 bool Rotation::isFinished() const
 {
     return progress >= 1.0f;
-}
-
-void Rotation::addNext(Rotation* rot)
-{
-    if (next == nullptr) {
-        next = rot;
-    } else {
-        next->addNext(rot);
-    }
-}
-
-Rotation* Rotation::getNext()
-{
-    return next;
 }
 
 float Rotation::getProgress() const

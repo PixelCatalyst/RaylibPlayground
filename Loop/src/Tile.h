@@ -2,6 +2,8 @@
 
 #include <raylib.h>
 
+#include <queue>
+
 #include "DrawItem.h"
 #include "Port.h"
 #include "Sprite.h"
@@ -10,17 +12,13 @@ class Rotation
 {
 private:
     float progress{0.0f};
-    Rotation* next{nullptr};
 
     float calculateVelocity() const;
+
 public:
     void update(float deltaSeconds);
 
     bool isFinished() const;
-
-    void addNext(Rotation* next);
-
-    Rotation* getNext();
 
     float getProgress() const;
 };
@@ -33,7 +31,7 @@ private:
     Color color;
     int baseRotationPos;
 
-    Rotation* rotation{nullptr};
+    std::queue<Rotation> rotations;
 
     void applyRotation();
 
