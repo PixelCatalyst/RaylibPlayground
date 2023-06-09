@@ -57,23 +57,24 @@ void Tile::addRotation()
     }
 }
 
-float Rotation::calculateVelocity() const
+float Rotation::calculateProgress(float time) const
 {
-    return (-20.0f * ((progress * progress) - progress) + 5.0f);
+    // Sigmoid function, result in [0.0, 1.0] for input in [0.0, 1.0]
+    return (1.0f / (1.0f + expf(-((time * 10.0f) - 5.0f)))) * 1.01379f - 0.007f;
 }
 
 void Rotation::update(float deltaSeconds)
 {
-    const float increase = deltaSeconds * calculateVelocity();
-    progress = std::min(1.0f, progress + increase);
+    totalSeconds += deltaSeconds;
+    progress = std::clamp(calculateProgress(totalSeconds / durationSeconds), 0.0f, 1.0f);
 }
 
 bool Rotation::isFinished() const
 {
-    return progress >= 1.0f;
+    return fabsf(progress - 1.0f) < std::numeric_limits<float>::epsilon();
 }
 
 float Rotation::getProgress() const
 {
-    return std::min(1.0f, progress);
+    return progress;
 }

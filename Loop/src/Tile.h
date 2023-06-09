@@ -12,8 +12,11 @@ class Rotation
 {
 private:
     float progress{0.0f};
+    float totalSeconds{0.0f};
 
-    float calculateVelocity() const;
+    const float durationSeconds{0.15f};
+
+    float calculateProgress(float time) const;
 
 public:
     void update(float deltaSeconds);
