@@ -19,7 +19,7 @@ private:
     float calculateProgress(float time) const;
 
 public:
-    void update(float deltaSeconds);
+    float update(float deltaSeconds);
 
     bool isFinished() const;
 

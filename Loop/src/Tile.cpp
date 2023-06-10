@@ -18,9 +18,9 @@ float Tile::size()
 
 bool Tile::update(float deltaSeconds)
 {
-    if (!rotations.empty()) {
+    while (!rotations.empty() && (deltaSeconds > 0.0f)) {
         Rotation& rotation = rotations.front();
-        rotation.update(deltaSeconds);
+        deltaSeconds = rotation.update(deltaSeconds);
         if (rotation.isFinished()) {
             rotations.pop();
             applyRotation();
@@ -63,10 +63,11 @@ float Rotation::calculateProgress(float time) const
     return (1.0f / (1.0f + expf(-((time * 10.0f) - 5.0f)))) * 1.01379f - 0.007f;
 }
 
-void Rotation::update(float deltaSeconds)
+float Rotation::update(float deltaSeconds)
 {
     totalSeconds += deltaSeconds;
     progress = std::clamp(calculateProgress(totalSeconds / durationSeconds), 0.0f, 1.0f);
+    return std::max(0.0f, totalSeconds - durationSeconds);
 }
 
 bool Rotation::isFinished() const
