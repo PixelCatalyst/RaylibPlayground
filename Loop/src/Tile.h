@@ -11,10 +11,10 @@
 class Rotation
 {
 private:
+    const float durationSeconds{0.15f};
+
     float progress{0.0f};
     float totalSeconds{0.0f};
-
-    const float durationSeconds{0.15f};
 
     float calculateProgress(float time) const;
 
@@ -41,11 +41,11 @@ private:
 public:
     explicit Tile(PortSet portSet, Sprite* sprite, Color color, int initialRotationPos);
 
-    static float size();
+    void addRotation();
 
     bool update(float deltaSeconds);
 
     void draw() const override;
 
-    void addRotation();
+    static float size();
 };
