@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <set>
 
 #include "DrawItem.h"
 #include "TileFactory.h"
@@ -13,6 +14,7 @@ class Mosaic
 {
 private:
     std::map<Coord, Tile> tiles;
+    std::set<Coord> tilesToUpdate;
     const unsigned width;
     const unsigned height;
 
@@ -20,6 +22,8 @@ private:
 
 public:
     Mosaic(const TileFactory& tileFactory, unsigned width, unsigned height);
+
+    void update(float deltaSeconds);
 
     void onLeftClick(const Vector2& mousePos, const Vector2& viewportSize);
 
