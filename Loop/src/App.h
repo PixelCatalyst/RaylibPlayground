@@ -17,6 +17,7 @@ class App
 {
 private:
     GameState gameState;
+    RenderTexture2D target;
 
     SpriteLoader* spriteLoader{nullptr};
     TileFactory* tileFactory{nullptr};
