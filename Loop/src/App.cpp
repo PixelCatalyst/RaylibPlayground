@@ -9,6 +9,8 @@ void App::init()
     InitWindow(700, 700, "Loop");
     SetTargetFPS(60);
 
+    target = LoadRenderTexture(700, 700);
+
     spriteLoader = new SpriteLoader();
     tileFactory = new TileFactory(*spriteLoader);
     tileFactory->initResources();
@@ -43,7 +45,7 @@ void App::update()
 
 void App::draw()
 {
-    BeginDrawing();
+    BeginTextureMode(target);
     ClearBackground(RAYWHITE);
 
     const Vector2 renderSize{
@@ -51,6 +53,14 @@ void App::draw()
             static_cast<float>(GetRenderHeight())
     };
     mosaic->drawCentered(renderSize);
+
+    EndTextureMode();
+
+    BeginDrawing();
+
+    Rectangle sourceRect{0.0f, 0.0f, (float)target.texture.width, (float)-target.texture.height};
+    Vector2 position{0.0f, 0.0f};
+    DrawTextureRec(target.texture, sourceRect, position, WHITE);
 
     EndDrawing();
 }
