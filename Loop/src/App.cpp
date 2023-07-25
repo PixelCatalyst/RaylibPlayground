@@ -11,6 +11,12 @@ void App::init()
 
     target = LoadRenderTexture(700, 700);
 
+    coloringShader = LoadShader(nullptr, "assets/shaders/coloring.frag");
+    int backgroundColorLoc = GetShaderLocation(coloringShader, "backgroundColor");
+    int foregroundColorLoc = GetShaderLocation(coloringShader, "foregroundColor");
+    SetShaderValue(coloringShader, backgroundColorLoc, backgroundColor, SHADER_UNIFORM_IVEC3);
+    SetShaderValue(coloringShader, foregroundColorLoc, foregroundColor, SHADER_UNIFORM_IVEC3);
+
     spriteLoader = new SpriteLoader();
     tileFactory = new TileFactory(*spriteLoader);
     tileFactory->initResources();
@@ -46,7 +52,7 @@ void App::update()
 void App::draw()
 {
     BeginTextureMode(target);
-    ClearBackground(RAYWHITE);
+    ClearBackground(BLACK);
 
     const Vector2 renderSize{
             static_cast<float>(GetRenderWidth()),
@@ -58,9 +64,11 @@ void App::draw()
 
     BeginDrawing();
 
+    BeginShaderMode(coloringShader);
     Rectangle sourceRect{0.0f, 0.0f, (float)target.texture.width, (float)-target.texture.height};
     Vector2 position{0.0f, 0.0f};
     DrawTextureRec(target.texture, sourceRect, position, WHITE);
+    EndShaderMode();
 
     EndDrawing();
 }
