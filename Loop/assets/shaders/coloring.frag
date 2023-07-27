@@ -1,7 +1,6 @@
 #version 330
 
 in vec2 fragTexCoord;
-in vec4 fragColor;
 
 uniform sampler2D texture0;
 uniform ivec3 backgroundColor;
@@ -11,9 +10,10 @@ out vec4 finalColor;
 
 void main()
 {
-    vec4 texelColor = texture(texture0, fragTexCoord) * fragColor;
+    vec4 foreground = vec4(foregroundColor / 255.0, 1.0);
+    vec4 background = vec4(backgroundColor / 255.0, 1.0);
 
-    vec3 color3 = mix(backgroundColor / 255.0, foregroundColor / 255.0, texelColor.r);
+    vec4 texelColor = texture(texture0, fragTexCoord);
 
-    finalColor = vec4(color3, texelColor.a);
+    finalColor = mix(background, foreground, texelColor.r);
 }

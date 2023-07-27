@@ -9,6 +9,7 @@ add_executable(
         src/TileFactory.cpp
         src/TileDefinition.cpp
         src/Port.cpp
+        src/ColoringShader.cpp
 )
 
 enable_raylib(Loop)

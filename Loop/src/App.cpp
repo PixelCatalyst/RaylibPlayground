@@ -10,12 +10,8 @@ void App::init()
     SetTargetFPS(60);
 
     target = LoadRenderTexture(700, 700);
-
-    coloringShader = LoadShader(nullptr, "assets/shaders/coloring.frag");
-    int backgroundColorLoc = GetShaderLocation(coloringShader, "backgroundColor");
-    int foregroundColorLoc = GetShaderLocation(coloringShader, "foregroundColor");
-    SetShaderValue(coloringShader, backgroundColorLoc, backgroundColor, SHADER_UNIFORM_IVEC3);
-    SetShaderValue(coloringShader, foregroundColorLoc, foregroundColor, SHADER_UNIFORM_IVEC3);
+    coloringShader.init();
+    coloringShader.setColors({103, 90, 131}, {176, 197, 229});
 
     spriteLoader = new SpriteLoader();
     tileFactory = new TileFactory(*spriteLoader);
@@ -47,6 +43,19 @@ void App::update()
     if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
         mosaic->onLeftClick(mousePos, renderSize);
     }
+
+    if (IsMouseButtonReleased(MOUSE_BUTTON_RIGHT)) {
+        Color back;
+        back.r = GetRandomValue(0, 255);
+        back.g = GetRandomValue(0, 255);
+        back.b = GetRandomValue(0, 255);
+        Color front;
+        front.r = GetRandomValue(0, 255);
+        front.g = GetRandomValue(0, 255);
+        front.b = GetRandomValue(0, 255);
+
+        coloringShader.setColors(back, front);
+    }
 }
 
 void App::draw()
@@ -64,11 +73,11 @@ void App::draw()
 
     BeginDrawing();
 
-    BeginShaderMode(coloringShader);
+    coloringShader.enable();
     Rectangle sourceRect{0.0f, 0.0f, (float)target.texture.width, (float)-target.texture.height};
     Vector2 position{0.0f, 0.0f};
     DrawTextureRec(target.texture, sourceRect, position, WHITE);
-    EndShaderMode();
+    coloringShader.disable();
 
     EndDrawing();
 }

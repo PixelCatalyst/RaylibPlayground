@@ -7,6 +7,7 @@
 #include "SpriteLoader.h"
 #include "TileDefinition.h"
 #include "TileFactory.h"
+#include "ColoringShader.h"
 
 struct GameState
 {
@@ -16,13 +17,9 @@ struct GameState
 class App
 {
 private:
-    // TODO consider extracting coloring functionality
-    constexpr static const int backgroundColor[3] = {103, 90, 131};
-    constexpr static const int foregroundColor[3] = {176, 197, 229};
-
     GameState gameState;
+    ColoringShader coloringShader;
     RenderTexture2D target;
-    Shader coloringShader;
 
     SpriteLoader* spriteLoader{nullptr};
     TileFactory* tileFactory{nullptr};
