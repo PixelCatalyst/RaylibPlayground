@@ -11,7 +11,8 @@ void App::init()
 
     target = LoadRenderTexture(700, 700);
     coloringShader.init();
-    coloringShader.setColors({103, 90, 131}, {176, 197, 229});
+    colorPalette = ColorPalette::createProcedurally();
+    coloringShader.setColors(colorPalette.getBackground(), colorPalette.getForeground());
 
     spriteLoader = new SpriteLoader();
     tileFactory = new TileFactory(*spriteLoader);
@@ -44,17 +45,10 @@ void App::update()
         mosaic->onLeftClick(mousePos, renderSize);
     }
 
+    // TODO Temporary testing only; Change color palette on level change
     if (IsMouseButtonReleased(MOUSE_BUTTON_RIGHT)) {
-        Color back;
-        back.r = GetRandomValue(0, 255);
-        back.g = GetRandomValue(0, 255);
-        back.b = GetRandomValue(0, 255);
-        Color front;
-        front.r = GetRandomValue(0, 255);
-        front.g = GetRandomValue(0, 255);
-        front.b = GetRandomValue(0, 255);
-
-        coloringShader.setColors(back, front);
+        colorPalette = ColorPalette::createProcedurally();
+        coloringShader.setColors(colorPalette.getBackground(), colorPalette.getForeground());
     }
 }
 

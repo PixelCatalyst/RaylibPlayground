@@ -8,6 +8,7 @@
 #include "TileDefinition.h"
 #include "TileFactory.h"
 #include "ColoringShader.h"
+#include "ColorPalette.h"
 
 struct GameState
 {
@@ -18,8 +19,9 @@ class App
 {
 private:
     GameState gameState;
+    ColorPalette colorPalette{};
     ColoringShader coloringShader;
-    RenderTexture2D target;
+    RenderTexture2D target{};
 
     SpriteLoader* spriteLoader{nullptr};
     TileFactory* tileFactory{nullptr};
