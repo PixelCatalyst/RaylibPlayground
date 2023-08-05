@@ -16,7 +16,7 @@ ColorPalette ColorPalette::createProcedurally()
     palette.foreground = ColorFromHSV(hue, saturation, brightness);
 
     const float hueJerk = 24.0f;
-    hue = (float)GetRandomValue(int(hue - hueJerk), int(hue + hueJerk));
+    hue = static_cast<float>(GetRandomValue(int(hue - hueJerk), int(hue + hueJerk)));
     hue = wrapHueValue(hue);
     saturation = static_cast<float>(GetRandomValue(170, 220)) / 1000.0f;
     brightness = static_cast<float>(GetRandomValue(870, 980)) / 1000.0f;

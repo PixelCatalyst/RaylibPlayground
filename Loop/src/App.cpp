@@ -74,7 +74,12 @@ void App::draw()
     BeginDrawing();
 
     coloringShader.enable();
-    Rectangle sourceRect{0.0f, 0.0f, (float)target.texture.width, (float)-target.texture.height};
+    Rectangle sourceRect{
+            0.0f,
+            0.0f,
+            static_cast<float>(target.texture.width),
+            static_cast<float>(-target.texture.height)
+    };
     Vector2 position{0.0f, 0.0f};
     DrawTextureRec(target.texture, sourceRect, position, WHITE);
     coloringShader.disable();
