@@ -2,12 +2,23 @@
 
 #include "DrawItem.h"
 
+#include <ctime>
+
 App::App() = default;
 
 void App::init()
 {
     InitWindow(700, 700, "Loop");
     SetTargetFPS(60);
+
+    unsigned seed = std::time(nullptr);
+    seed = seed ^ ((seed & 0x00FF) << 13);
+    SetRandomSeed(seed);
+
+    target = LoadRenderTexture(700, 700);
+    coloringShader.init();
+    colorPalette = ColorPalette::createProcedurally();
+    coloringShader.setColors(colorPalette.getBackground(), colorPalette.getForeground());
 
     spriteLoader = new SpriteLoader();
     tileFactory = new TileFactory(*spriteLoader);
@@ -39,18 +50,39 @@ void App::update()
     if (IsMouseButtonReleased(MOUSE_BUTTON_LEFT)) {
         mosaic->onLeftClick(mousePos, renderSize);
     }
+
+    // TODO Temporary testing only; Change color palette on level change
+    if (IsMouseButtonReleased(MOUSE_BUTTON_RIGHT)) {
+        colorPalette = ColorPalette::createProcedurally();
+        coloringShader.setColors(colorPalette.getBackground(), colorPalette.getForeground());
+    }
 }
 
 void App::draw()
 {
-    BeginDrawing();
-    ClearBackground(RAYWHITE);
+    BeginTextureMode(target);
+    ClearBackground(BLACK);
 
     const Vector2 renderSize{
             static_cast<float>(GetRenderWidth()),
             static_cast<float>(GetRenderHeight())
     };
     mosaic->drawCentered(renderSize);
+
+    EndTextureMode();
+
+    BeginDrawing();
+
+    coloringShader.enable();
+    Rectangle sourceRect{
+            0.0f,
+            0.0f,
+            static_cast<float>(target.texture.width),
+            static_cast<float>(-target.texture.height)
+    };
+    Vector2 position{0.0f, 0.0f};
+    DrawTextureRec(target.texture, sourceRect, position, WHITE);
+    coloringShader.disable();
 
     EndDrawing();
 }
