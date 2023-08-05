@@ -2,12 +2,18 @@
 
 #include "DrawItem.h"
 
+#include <ctime>
+
 App::App() = default;
 
 void App::init()
 {
     InitWindow(700, 700, "Loop");
     SetTargetFPS(60);
+
+    unsigned seed = std::time(nullptr);
+    seed = seed ^ ((seed & 0x00FF) << 13);
+    SetRandomSeed(seed);
 
     target = LoadRenderTexture(700, 700);
     coloringShader.init();
