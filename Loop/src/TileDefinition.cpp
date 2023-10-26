@@ -19,7 +19,7 @@ TileDefinition TileDefinitionLoader::loadFromFile(SpriteLoader& spriteLoader)
 
 std::istringstream TileDefinitionLoader::loadDefFileText(Context& context)
 {
-    context.currentDefFileText = LoadFileText(context.defFilePath);
+    context.currentDefFileText = LoadFileText(context.defFilePath.c_str());
     return std::istringstream{context.currentDefFileText};
 }
 
@@ -29,9 +29,19 @@ void TileDefinitionLoader::parseLine(Context& context, SpriteLoader& spriteLoade
     lineStream >> context.token;
     size_t dotPos = context.token.find_last_of('.');
     std::string friendlyId = context.token.substr(0, dotPos);
+    std::string fileExtension = context.token.substr(dotPos);
     if (spriteLoader.getSprite(friendlyId) != nullptr) {
         TraceLog(LOG_WARNING, "Detected definition of already used tile sprite, can produce unexpected results");
     }
+
+    spriteLoader.loadSprite(
+            SpriteDescriptor::of(friendlyId)
+                    .add(SpriteVariant::PLAIN,
+                         context.tilesBasePath + friendlyId + fileExtension)
+                    .add(SpriteVariant::OUTLINE,
+                         context.tilesBasePath + friendlyId + context.outlineSpriteTag + fileExtension)
+    );
+
     spriteLoader.loadSprite(friendlyId, context.tilesBasePath + context.token);
     if (spriteLoader.getSprite(friendlyId) == nullptr) {
         TraceLog(LOG_FATAL, "Unable to parse tile definition because given sprite was not loaded");
