@@ -31,6 +31,8 @@ bool App::isRunning()
     return !WindowShouldClose();
 }
 
+bool outline = false;
+
 void App::update()
 {
     const float degreesPerSecond = 180.0f;
@@ -56,6 +58,11 @@ void App::update()
         colorPalette = ColorPalette::createProcedurally();
         coloringShader.setColors(colorPalette.getBackground(), colorPalette.getForeground());
     }
+
+    // TODO Temporary testing only; Change tile drawing mode to outline
+    if (IsKeyPressed(KEY_ENTER)) {
+        outline = !outline;
+    }
 }
 
 void App::draw()
@@ -67,7 +74,11 @@ void App::draw()
             static_cast<float>(GetRenderWidth()),
             static_cast<float>(GetRenderHeight())
     };
-    mosaic->drawCentered(renderSize);
+    if (outline) {
+        mosaic->drawCenteredAsOutline(renderSize);
+    } else {
+        mosaic->drawCentered(renderSize);
+    }
 
     EndTextureMode();
 

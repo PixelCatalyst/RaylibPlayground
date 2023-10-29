@@ -2,12 +2,17 @@
 
 #include "Sprite.h"
 
-Sprite::Sprite(const Texture2D& texture) :
-        texture{texture}
+Sprite::Sprite(const Texture2D& texture, const Texture2D& outlineTexture) :
+        texture{texture},
+        outlineTexture{outlineTexture}
 {
 }
 
-void Sprite::draw(Color color) const
+void Sprite::draw(Color color, SpriteVariant variant) const
 {
-    DrawTexture(texture, 0, 0, color);
+    if (variant == SpriteVariant::PLAIN) {
+        DrawTexture(texture, 0, 0, color);
+    } else if (variant == SpriteVariant::OUTLINE) {
+        DrawTexture(outlineTexture, 0, 0, color);
+    }
 }

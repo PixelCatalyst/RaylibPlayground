@@ -35,21 +35,19 @@ void SpriteLoader::loadSprite(const SpriteDescriptor& sd)
     std::string friendlyId = sd.getId();
     auto it = sprites.find(friendlyId);
     if (it == sprites.end()) {
-        sd.getFileNameByVariant(SpriteVariant::PLAIN);
-        sd.getFileNameByVariant(SpriteVariant::OUTLINE);
-        //TODO
-        Texture2D texture = LoadTexture(fileName.c_str());
-        sprites.insert({friendlyId, new Sprite(texture)});
+        Texture2D texture = loadTexture(sd.getFileNameByVariant(SpriteVariant::PLAIN));
+        Texture2D outlineTexture = loadTexture(sd.getFileNameByVariant(SpriteVariant::OUTLINE));
+        sprites.insert({friendlyId, new Sprite(texture, outlineTexture)});
     }
 }
 
-void SpriteLoader::loadSprite(const std::string& friendlyId, const std::string& fileName)
+Texture2D SpriteLoader::loadTexture(const std::string& fileName)
 {
-    auto it = sprites.find(friendlyId);
-    if (it == sprites.end()) {
-        Texture2D texture = LoadTexture(fileName.c_str());
-        sprites.insert({friendlyId, new Sprite(texture)});
+    Texture2D texture{};
+    if (!fileName.empty()) {
+        texture = LoadTexture(fileName.c_str());
     }
+    return texture;
 }
 
 Sprite* SpriteLoader::getSprite(const std::string& friendlyId) const

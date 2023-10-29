@@ -123,3 +123,26 @@ void Mosaic::drawTiles() const
         rlPopMatrix();
     }
 }
+
+void Mosaic::drawCenteredAsOutline(const Vector2& viewportSize) const
+{
+    const Vector2 mosaicSize{
+            static_cast<float>(width) * Tile::size(),
+            static_cast<float>(height) * Tile::size()
+    };
+    rlPushMatrix();
+    rlTranslatef((viewportSize.x - mosaicSize.x) / 2.0f, (viewportSize.y - mosaicSize.y) / 2.0f, 0);
+    drawTilesOutline();
+    rlPopMatrix();
+}
+
+void Mosaic::drawTilesOutline() const
+{
+    const float tileSize = Tile::size();
+    for (auto& [coord, tile]: tiles) {
+        rlPushMatrix();
+        rlTranslatef(coord.first * tileSize, coord.second * tileSize, 0);
+        tile.drawOutline();
+        rlPopMatrix();
+    }
+}

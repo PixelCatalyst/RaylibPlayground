@@ -47,5 +47,7 @@ public:
 
     void draw() const override;
 
+    void drawOutline() const;
+
     static float size();
 };

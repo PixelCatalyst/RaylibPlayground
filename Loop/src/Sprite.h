@@ -15,7 +15,7 @@ private:
     Texture2D texture;
     Texture2D outlineTexture;
 public:
-    explicit Sprite(const Texture2D& texture);
+    explicit Sprite(const Texture2D& texture, const Texture2D& outlineTexture);
 
-    void draw(Color color) const;
+    void draw(Color color, SpriteVariant variant) const;
 };

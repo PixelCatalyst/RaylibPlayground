@@ -30,10 +30,10 @@ class SpriteLoader
 {
 private:
     std::map<std::string, Sprite*> sprites;
+
+    Texture2D loadTexture(const std::string& fileName);
 public:
     void loadSprite(const SpriteDescriptor& sd);
-
-    void loadSprite(const std::string& friendlyId, const std::string& fileName);
 
     Sprite* getSprite(const std::string& friendlyId) const;
 };
