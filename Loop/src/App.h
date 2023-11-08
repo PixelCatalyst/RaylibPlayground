@@ -22,6 +22,10 @@ private:
     ColorPalette colorPalette{};
     ColoringShader coloringShader;
     RenderTexture2D target{};
+    RenderTexture2D secondaryTarget{};
+
+    Shader fadeShader{};
+    int textureLoc;
 
     SpriteLoader* spriteLoader{nullptr};
     TileFactory* tileFactory{nullptr};

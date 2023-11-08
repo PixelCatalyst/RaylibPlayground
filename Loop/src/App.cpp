@@ -16,9 +16,13 @@ void App::init()
     SetRandomSeed(seed);
 
     target = LoadRenderTexture(700, 700);
+    secondaryTarget = LoadRenderTexture(700, 700);
+
+    fadeShader = LoadShader(nullptr, "assets/shaders/radial_fade.frag");
+    textureLoc = GetShaderLocation(fadeShader, "texture1");
+
     coloringShader.init();
     colorPalette = ColorPalette::createProcedurally();
-    coloringShader.setColors(colorPalette.getBackground(), colorPalette.getForeground());
 
     spriteLoader = new SpriteLoader();
     tileFactory = new TileFactory(*spriteLoader);
@@ -56,7 +60,6 @@ void App::update()
     // TODO Temporary testing only; Change color palette on level change
     if (IsMouseButtonReleased(MOUSE_BUTTON_RIGHT)) {
         colorPalette = ColorPalette::createProcedurally();
-        coloringShader.setColors(colorPalette.getBackground(), colorPalette.getForeground());
     }
 
     // TODO Temporary testing only; Change tile drawing mode to outline
@@ -67,24 +70,10 @@ void App::update()
 
 void App::draw()
 {
-    BeginTextureMode(target);
-    ClearBackground(BLACK);
-
     const Vector2 renderSize{
             static_cast<float>(GetRenderWidth()),
             static_cast<float>(GetRenderHeight())
     };
-    if (outline) {
-        mosaic->drawCenteredAsOutline(renderSize);
-    } else {
-        mosaic->drawCentered(renderSize);
-    }
-
-    EndTextureMode();
-
-    BeginDrawing();
-
-    coloringShader.enable();
     Rectangle sourceRect{
             0.0f,
             0.0f,
@@ -92,9 +81,36 @@ void App::draw()
             static_cast<float>(-target.texture.height)
     };
     Vector2 position{0.0f, 0.0f};
+
+    BeginTextureMode(target);
+    ClearBackground(BLACK);
+    mosaic->drawCentered(renderSize);
+    EndTextureMode();
+
+    BeginTextureMode(secondaryTarget);
+    ClearBackground(BLACK);
+    mosaic->drawCenteredAsOutline(renderSize);
+    EndTextureMode();
+
+    BeginTextureMode(target);
+    coloringShader.setColors(colorPalette.getBackground(), colorPalette.getForeground());
+    coloringShader.enable();
     DrawTextureRec(target.texture, sourceRect, position, WHITE);
     coloringShader.disable();
+    EndTextureMode();
 
+    BeginTextureMode(secondaryTarget);
+    coloringShader.setColors(colorPalette.getBackground(), colorPalette.getForeground());
+    coloringShader.enable();
+    DrawTextureRec(secondaryTarget.texture, sourceRect, position, WHITE);
+    coloringShader.disable();
+    EndTextureMode();
+
+    BeginDrawing();
+    BeginShaderMode(fadeShader);
+    SetShaderValueTexture(fadeShader, textureLoc, secondaryTarget.texture);
+    DrawTextureRec(target.texture, sourceRect, position, WHITE);
+    EndShaderMode();
     EndDrawing();
 }
 
