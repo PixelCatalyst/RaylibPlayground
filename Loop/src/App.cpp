@@ -18,11 +18,9 @@ void App::init()
     target = LoadRenderTexture(700, 700);
     secondaryTarget = LoadRenderTexture(700, 700);
 
-    fadeShader = LoadShader(nullptr, "assets/shaders/radial_fade.frag");
-    textureLoc = GetShaderLocation(fadeShader, "texture1");
-
-    coloringShader.init();
     colorPalette = ColorPalette::createProcedurally();
+    coloringShader.init();
+    radialFadeShader.init();
 
     spriteLoader = new SpriteLoader();
     tileFactory = new TileFactory(*spriteLoader);
@@ -35,16 +33,9 @@ bool App::isRunning()
     return !WindowShouldClose();
 }
 
-bool outline = false;
-
 void App::update()
 {
-    const float degreesPerSecond = 180.0f;
     float deltaSeconds = GetFrameTime();
-    gameState.angle += degreesPerSecond * deltaSeconds;
-    if (gameState.angle >= 360.0f) {
-        gameState.angle = gameState.angle - 360.0f;
-    }
 
     mosaic->update(deltaSeconds);
 
@@ -64,7 +55,12 @@ void App::update()
 
     // TODO Temporary testing only; Change tile drawing mode to outline
     if (IsKeyPressed(KEY_ENTER)) {
-        outline = !outline;
+        gameState.phase = GamePhase::END_TRANSITION;
+    }
+
+    if (gameState.phase == GamePhase::END_TRANSITION) {
+        radialFadeShader.setOrigin({0.5, 0.5});
+        radialFadeShader.setRadius(0.3);
     }
 }
 
@@ -107,10 +103,9 @@ void App::draw()
     EndTextureMode();
 
     BeginDrawing();
-    BeginShaderMode(fadeShader);
-    SetShaderValueTexture(fadeShader, textureLoc, secondaryTarget.texture);
+    radialFadeShader.enable(secondaryTarget.texture);
     DrawTextureRec(target.texture, sourceRect, position, WHITE);
-    EndShaderMode();
+    radialFadeShader.disable();
     EndDrawing();
 }
 
