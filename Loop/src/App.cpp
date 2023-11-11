@@ -56,11 +56,15 @@ void App::update()
     // TODO Temporary testing only; Change tile drawing mode to outline
     if (IsKeyPressed(KEY_ENTER)) {
         gameState.phase = GamePhase::END_TRANSITION;
+        radialFadeShader.setOrigin({0.5, 0.5});
     }
 
     if (gameState.phase == GamePhase::END_TRANSITION) {
-        radialFadeShader.setOrigin({0.5, 0.5});
-        radialFadeShader.setRadius(0.3);
+        fadeRadius += (fadeEndRadius / fadeDurationSeconds) * deltaSeconds;
+        radialFadeShader.setRadius(fadeRadius);
+        if (fadeRadius > fadeEndRadius) {
+            gameState.phase = GamePhase::END;
+        }
     }
 }
 

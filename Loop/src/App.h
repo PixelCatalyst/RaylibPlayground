@@ -33,6 +33,10 @@ private:
     RenderTexture2D target{};
     RenderTexture2D secondaryTarget{};
 
+    const float fadeDurationSeconds{0.4f};
+    const float fadeEndRadius{0.71f};
+    float fadeRadius{0.0f};
+
     SpriteLoader* spriteLoader{nullptr};
     TileFactory* tileFactory{nullptr};
     Mosaic* mosaic{nullptr};
