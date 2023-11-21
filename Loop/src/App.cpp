@@ -57,14 +57,16 @@ void App::update()
     if (IsKeyPressed(KEY_ENTER)) {
         gameState.phase = GamePhase::END_TRANSITION;
         radialFadeShader.setOrigin({0.5, 0.5});
+        gameState.fadeAnimation = FadeAnimation(0.45f, 0.8f);
     }
 
     if (gameState.phase == GamePhase::END_TRANSITION) {
-        fadeRadius += (fadeEndRadius / fadeDurationSeconds) * deltaSeconds;
-        radialFadeShader.setRadius(fadeRadius);
-        if (fadeRadius > fadeEndRadius) {
+        if (gameState.fadeAnimation.isFinished()) {
             gameState.phase = GamePhase::END;
+        } else {
+            gameState.fadeAnimation.update(deltaSeconds);
         }
+        radialFadeShader.setRadius(gameState.fadeAnimation.getProgress());
     }
 }
 

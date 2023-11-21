@@ -10,6 +10,7 @@
 #include "RadialFadeShader.h"
 #include "ColoringShader.h"
 #include "ColorPalette.h"
+#include "FadeAnimation.h"
 
 enum class GamePhase : int8_t
 {
@@ -21,6 +22,7 @@ enum class GamePhase : int8_t
 struct GameState
 {
     GamePhase phase{GamePhase::PLAY};
+    FadeAnimation fadeAnimation{};
 };
 
 class App
@@ -32,10 +34,6 @@ private:
     RadialFadeShader radialFadeShader;
     RenderTexture2D target{};
     RenderTexture2D secondaryTarget{};
-
-    const float fadeDurationSeconds{0.4f};
-    const float fadeEndRadius{0.71f};
-    float fadeRadius{0.0f};
 
     SpriteLoader* spriteLoader{nullptr};
     TileFactory* tileFactory{nullptr};
