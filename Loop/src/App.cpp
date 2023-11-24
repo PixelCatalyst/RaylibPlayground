@@ -102,7 +102,7 @@ void App::draw()
     EndTextureMode();
 
     BeginTextureMode(secondaryTarget);
-    coloringShader.setColors(colorPalette.getBackground(), colorPalette.getForeground());
+    coloringShader.setColors(colorPalette.getNeonBackground(), colorPalette.getNeonForeground());
     coloringShader.enable();
     DrawTextureRec(secondaryTarget.texture, sourceRect, position, WHITE);
     coloringShader.disable();
