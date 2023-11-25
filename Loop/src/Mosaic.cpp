@@ -103,23 +103,36 @@ void Mosaic::rotateTile(unsigned x, unsigned y)
 
 void Mosaic::drawCentered(const Vector2& viewportSize) const
 {
+    rlPushMatrix();
+    translateCentering(viewportSize);
+    drawTiles([](const Tile& tile) { tile.draw(); });
+    rlPopMatrix();
+}
+
+void Mosaic::drawCenteredAsOutline(const Vector2& viewportSize) const
+{
+    rlPushMatrix();
+    translateCentering(viewportSize);
+    drawTiles([](const Tile& tile) { tile.drawOutline(); });
+    rlPopMatrix();
+}
+
+void Mosaic::translateCentering(const Vector2& viewportSize) const
+{
     const Vector2 mosaicSize{
             static_cast<float>(width) * Tile::size(),
             static_cast<float>(height) * Tile::size()
     };
-    rlPushMatrix();
-    rlTranslatef((viewportSize.x - mosaicSize.x) / 2.0f, (viewportSize.y - mosaicSize.y) / 2.0f, 0);
-    drawTiles();
-    rlPopMatrix();
+    rlTranslatef((viewportSize.x - mosaicSize.x) / 2.0f, (viewportSize.y - mosaicSize.y) / 2.0f, 0.0f);
 }
 
-void Mosaic::drawTiles() const
+void Mosaic::drawTiles(const std::function<void(const Tile&)>& drawFunction) const
 {
     const float tileSize = Tile::size();
     for (auto& [coord, tile]: tiles) {
         rlPushMatrix();
         rlTranslatef(coord.first * tileSize, coord.second * tileSize, 0);
-        tile.draw();
+        drawFunction(tile);
         rlPopMatrix();
     }
 }

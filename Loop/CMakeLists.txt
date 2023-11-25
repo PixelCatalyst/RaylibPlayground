@@ -11,6 +11,8 @@ add_executable(
         src/Port.cpp
         src/ColoringShader.cpp
         src/ColorPalette.cpp
+        src/RadialFadeShader.cpp
+        src/FadeAnimation.cpp
 )
 
 enable_raylib(Loop)

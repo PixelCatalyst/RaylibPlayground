@@ -2,7 +2,9 @@
 
 ColorPalette::ColorPalette() :
         background{BLACK},
-        foreground{WHITE}
+        foreground{WHITE},
+        neonBackground{WHITE},
+        neonForeground{BLACK}
 {
 }
 
@@ -14,6 +16,7 @@ ColorPalette ColorPalette::createProcedurally()
     float saturation = static_cast<float>(GetRandomValue(660, 920)) / 1000.0f;
     float brightness = static_cast<float>(GetRandomValue(520, 610)) / 1000.0f;
     palette.foreground = ColorFromHSV(hue, saturation, brightness);
+    palette.neonBackground = ColorFromHSV(hue, saturation, 0.14f + brightness * 0.05f);
 
     const float hueJerk = 24.0f;
     hue = static_cast<float>(GetRandomValue(int(hue - hueJerk), int(hue + hueJerk)));
@@ -21,6 +24,7 @@ ColorPalette ColorPalette::createProcedurally()
     saturation = static_cast<float>(GetRandomValue(170, 220)) / 1000.0f;
     brightness = static_cast<float>(GetRandomValue(870, 980)) / 1000.0f;
     palette.background = ColorFromHSV(hue, saturation, brightness);
+    palette.neonForeground = ColorFromHSV(hue, saturation * 4.2f * (1.0f - saturation * 0.33f), brightness);
 
     return palette;
 }
@@ -43,4 +47,14 @@ Color ColorPalette::getBackground() const
 Color ColorPalette::getForeground() const
 {
     return foreground;
+}
+
+Color ColorPalette::getNeonBackground() const
+{
+    return neonBackground;
+}
+
+Color ColorPalette::getNeonForeground() const
+{
+    return neonForeground;
 }

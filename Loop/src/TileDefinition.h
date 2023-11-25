@@ -22,8 +22,9 @@ class TileDefinitionLoader
 private:
     struct Context
     {
-        const char* defFilePath = "assets/tiles/tiledef";
-        const char* tilesBasePath = "assets/tiles/";
+        const std::string defFilePath = "assets/tiles/tiledef";
+        const std::string tilesBasePath = "assets/tiles/";
+        const std::string outlineSpriteTag = "_outline";
 
         TileDefinition tileDef;
         char* currentDefFileText = nullptr;

@@ -6,8 +6,8 @@ class ColoringShader
 {
 private:
     Shader shader{};
-    int backgroundColorLoc = -1;
-    int foregroundColorLoc = -1;
+    int backgroundColorLoc{-1};
+    int foregroundColorLoc{-1};
 
     int backgroundColorVector[3] = {0};
     int foregroundColorVector[3] = {0};

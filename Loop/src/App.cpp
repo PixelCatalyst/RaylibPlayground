@@ -16,9 +16,11 @@ void App::init()
     SetRandomSeed(seed);
 
     target = LoadRenderTexture(700, 700);
-    coloringShader.init();
+    secondaryTarget = LoadRenderTexture(700, 700);
+
     colorPalette = ColorPalette::createProcedurally();
-    coloringShader.setColors(colorPalette.getBackground(), colorPalette.getForeground());
+    coloringShader.init();
+    radialFadeShader.init();
 
     spriteLoader = new SpriteLoader();
     tileFactory = new TileFactory(*spriteLoader);
@@ -33,12 +35,7 @@ bool App::isRunning()
 
 void App::update()
 {
-    const float degreesPerSecond = 180.0f;
     float deltaSeconds = GetFrameTime();
-    gameState.angle += degreesPerSecond * deltaSeconds;
-    if (gameState.angle >= 360.0f) {
-        gameState.angle = gameState.angle - 360.0f;
-    }
 
     mosaic->update(deltaSeconds);
 
@@ -54,26 +51,31 @@ void App::update()
     // TODO Temporary testing only; Change color palette on level change
     if (IsMouseButtonReleased(MOUSE_BUTTON_RIGHT)) {
         colorPalette = ColorPalette::createProcedurally();
-        coloringShader.setColors(colorPalette.getBackground(), colorPalette.getForeground());
+    }
+
+    // TODO Temporary testing only; Change tile drawing mode to outline
+    if (IsKeyPressed(KEY_ENTER)) {
+        gameState.phase = GamePhase::END_TRANSITION;
+        radialFadeShader.setOrigin({0.5, 0.5});
+        gameState.fadeAnimation = FadeAnimation(0.45f, 0.8f);
+    }
+
+    if (gameState.phase == GamePhase::END_TRANSITION) {
+        if (gameState.fadeAnimation.isFinished()) {
+            gameState.phase = GamePhase::END;
+        } else {
+            gameState.fadeAnimation.update(deltaSeconds);
+        }
+        radialFadeShader.setRadius(gameState.fadeAnimation.getProgress());
     }
 }
 
 void App::draw()
 {
-    BeginTextureMode(target);
-    ClearBackground(BLACK);
-
     const Vector2 renderSize{
             static_cast<float>(GetRenderWidth()),
             static_cast<float>(GetRenderHeight())
     };
-    mosaic->drawCentered(renderSize);
-
-    EndTextureMode();
-
-    BeginDrawing();
-
-    coloringShader.enable();
     Rectangle sourceRect{
             0.0f,
             0.0f,
@@ -81,9 +83,35 @@ void App::draw()
             static_cast<float>(-target.texture.height)
     };
     Vector2 position{0.0f, 0.0f};
+
+    BeginTextureMode(target);
+    ClearBackground(BLACK);
+    mosaic->drawCentered(renderSize);
+    EndTextureMode();
+
+    BeginTextureMode(secondaryTarget);
+    ClearBackground(BLACK);
+    mosaic->drawCenteredAsOutline(renderSize);
+    EndTextureMode();
+
+    BeginTextureMode(target);
+    coloringShader.setColors(colorPalette.getBackground(), colorPalette.getForeground());
+    coloringShader.enable();
     DrawTextureRec(target.texture, sourceRect, position, WHITE);
     coloringShader.disable();
+    EndTextureMode();
 
+    BeginTextureMode(secondaryTarget);
+    coloringShader.setColors(colorPalette.getNeonBackground(), colorPalette.getNeonForeground());
+    coloringShader.enable();
+    DrawTextureRec(secondaryTarget.texture, sourceRect, position, WHITE);
+    coloringShader.disable();
+    EndTextureMode();
+
+    BeginDrawing();
+    radialFadeShader.enable(secondaryTarget.texture);
+    DrawTextureRec(target.texture, sourceRect, position, WHITE);
+    radialFadeShader.disable();
     EndDrawing();
 }
 

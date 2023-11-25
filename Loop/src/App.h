@@ -7,12 +7,22 @@
 #include "SpriteLoader.h"
 #include "TileDefinition.h"
 #include "TileFactory.h"
+#include "RadialFadeShader.h"
 #include "ColoringShader.h"
 #include "ColorPalette.h"
+#include "FadeAnimation.h"
+
+enum class GamePhase : int8_t
+{
+    PLAY,
+    END_TRANSITION,
+    END
+};
 
 struct GameState
 {
-    float angle{0.0f};
+    GamePhase phase{GamePhase::PLAY};
+    FadeAnimation fadeAnimation{};
 };
 
 class App
@@ -21,7 +31,9 @@ private:
     GameState gameState;
     ColorPalette colorPalette{};
     ColoringShader coloringShader;
+    RadialFadeShader radialFadeShader;
     RenderTexture2D target{};
+    RenderTexture2D secondaryTarget{};
 
     SpriteLoader* spriteLoader{nullptr};
     TileFactory* tileFactory{nullptr};

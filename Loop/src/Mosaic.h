@@ -2,6 +2,7 @@
 
 #include <map>
 #include <set>
+#include <functional>
 
 #include "DrawItem.h"
 #include "TileFactory.h"
@@ -18,7 +19,9 @@ private:
     const unsigned width;
     const unsigned height;
 
-    void drawTiles() const;
+    void translateCentering(const Vector2& viewportSize) const;
+
+    void drawTiles(const std::function<void(const Tile&)>& drawFunction) const;
 
 public:
     Mosaic(const TileFactory& tileFactory, unsigned width, unsigned height);
@@ -28,6 +31,8 @@ public:
     void onLeftClick(const Vector2& mousePos, const Vector2& viewportSize);
 
     void drawCentered(const Vector2& viewportSize) const;
+
+    void drawCenteredAsOutline(const Vector2& viewportSize) const;
 
     void rotateTile(unsigned x, unsigned y);
 };
