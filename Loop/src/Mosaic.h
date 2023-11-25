@@ -2,6 +2,7 @@
 
 #include <map>
 #include <set>
+#include <functional>
 
 #include "DrawItem.h"
 #include "TileFactory.h"
@@ -18,9 +19,9 @@ private:
     const unsigned width;
     const unsigned height;
 
-    void drawTiles() const;
+    void translateCentering(const Vector2& viewportSize) const;
 
-    void drawTilesOutline() const;
+    void drawTiles(const std::function<void(const Tile&)>& drawFunction) const;
 
 public:
     Mosaic(const TileFactory& tileFactory, unsigned width, unsigned height);

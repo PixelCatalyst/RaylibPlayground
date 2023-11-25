@@ -59,20 +59,15 @@ void Tile::applyRotation()
 
 void Tile::draw() const
 {
-    float halfSize = Tile::size() / 2.0f;
-    rlPushMatrix();
-    rlTranslatef(halfSize, halfSize, 0.0f);
-    float angle = 90.0f * static_cast<float>(baseRotationPos);
-    if (!rotations.empty()) {
-        angle += 90.0f * rotations.front().getProgress();
-    }
-    rlRotatef(angle, 0.0f, 0.0f, 1.0f);
-    rlTranslatef(-halfSize, -halfSize, 0.0f);
-    sprite->draw(color, SpriteVariant::PLAIN);
-    rlPopMatrix();
+    drawByVariant(SpriteVariant::PLAIN);
 }
 
 void Tile::drawOutline() const
+{
+    drawByVariant(SpriteVariant::OUTLINE);
+}
+
+void Tile::drawByVariant(SpriteVariant variant) const
 {
     float halfSize = Tile::size() / 2.0f;
     rlPushMatrix();
@@ -83,7 +78,7 @@ void Tile::drawOutline() const
     }
     rlRotatef(angle, 0.0f, 0.0f, 1.0f);
     rlTranslatef(-halfSize, -halfSize, 0.0f);
-    sprite->draw(color, SpriteVariant::OUTLINE);
+    sprite->draw(color, variant);
     rlPopMatrix();
 }
 

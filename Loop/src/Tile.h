@@ -38,6 +38,8 @@ private:
 
     void applyRotation();
 
+    void drawByVariant(SpriteVariant variant) const;
+
 public:
     explicit Tile(PortSet portSet, Sprite* sprite, Color color, int initialRotationPos);
 
