@@ -117,6 +117,14 @@ void Mosaic::drawCenteredAsOutline(const Vector2& viewportSize) const
     rlPopMatrix();
 }
 
+void Mosaic::drawCenteredAsAnimGradient(const Vector2& viewportSize) const
+{
+    rlPushMatrix();
+    translateCentering(viewportSize);
+    drawTiles([](const Tile& tile) { tile.drawAnimGradient(); });
+    rlPopMatrix();
+}
+
 void Mosaic::translateCentering(const Vector2& viewportSize) const
 {
     const Vector2 mosaicSize{

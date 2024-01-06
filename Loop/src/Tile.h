@@ -51,5 +51,7 @@ public:
 
     void drawOutline() const;
 
+    void drawAnimGradient() const;
+
     static float size();
 };

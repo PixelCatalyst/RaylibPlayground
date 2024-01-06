@@ -35,6 +35,8 @@ private:
     RenderTexture2D target{};
     RenderTexture2D secondaryTarget{};
 
+    Shader writeShader{};
+
     SpriteLoader* spriteLoader{nullptr};
     TileFactory* tileFactory{nullptr};
     Mosaic* mosaic{nullptr};

@@ -37,7 +37,8 @@ void SpriteLoader::loadSprite(const SpriteDescriptor& sd)
     if (it == sprites.end()) {
         Texture2D texture = loadTexture(sd.getFileNameByVariant(SpriteVariant::PLAIN));
         Texture2D outlineTexture = loadTexture(sd.getFileNameByVariant(SpriteVariant::OUTLINE));
-        sprites.insert({friendlyId, new Sprite(texture, outlineTexture)});
+        Texture2D animGradientTexture = loadTexture(sd.getFileNameByVariant(SpriteVariant::ANIM_GRADIENT));
+        sprites.insert({friendlyId, new Sprite(texture, outlineTexture, animGradientTexture)});
     }
 }
 

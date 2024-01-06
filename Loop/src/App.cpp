@@ -22,6 +22,8 @@ void App::init()
     coloringShader.init();
     radialFadeShader.init();
 
+    writeShader = LoadShader(nullptr, "assets/shaders/write.frag");
+
     spriteLoader = new SpriteLoader();
     tileFactory = new TileFactory(*spriteLoader);
     tileFactory->initResources();
@@ -91,22 +93,28 @@ void App::draw()
 
     BeginTextureMode(secondaryTarget);
     ClearBackground(BLACK);
-    mosaic->drawCenteredAsOutline(renderSize);
+    //mosaic->drawCenteredAsOutline(renderSize);
+    mosaic->drawCenteredAsAnimGradient(renderSize);
     EndTextureMode();
 
-    BeginTextureMode(target);
-    coloringShader.setColors(colorPalette.getBackground(), colorPalette.getForeground());
-    coloringShader.enable();
-    DrawTextureRec(target.texture, sourceRect, position, WHITE);
-    coloringShader.disable();
-    EndTextureMode();
+    //BeginTextureMode(secondaryTarget);
+    //ClearBackground(BLACK);
+    //mosaic->drawCenteredAsOutline(renderSize);
+    //EndTextureMode();
 
-    BeginTextureMode(secondaryTarget);
-    coloringShader.setColors(colorPalette.getNeonBackground(), colorPalette.getNeonForeground());
-    coloringShader.enable();
-    DrawTextureRec(secondaryTarget.texture, sourceRect, position, WHITE);
-    coloringShader.disable();
-    EndTextureMode();
+    //BeginTextureMode(target);
+    //coloringShader.setColors(colorPalette.getBackground(), colorPalette.getForeground());
+    //coloringShader.enable();
+    //DrawTextureRec(target.texture, sourceRect, position, WHITE);
+    //coloringShader.disable();
+    //EndTextureMode();
+
+    //BeginTextureMode(secondaryTarget);
+    //coloringShader.setColors(colorPalette.getNeonBackground(), colorPalette.getNeonForeground());
+    //coloringShader.enable();
+    //DrawTextureRec(secondaryTarget.texture, sourceRect, position, WHITE);
+    //coloringShader.disable();
+    //EndTextureMode();
 
     BeginDrawing();
     radialFadeShader.enable(secondaryTarget.texture);
