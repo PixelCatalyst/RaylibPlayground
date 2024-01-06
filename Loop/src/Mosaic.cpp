@@ -7,59 +7,92 @@ Mosaic::Mosaic(const TileFactory& tileFactory, unsigned width, unsigned height) 
         width(width),
         height(height)
 {
-    const unsigned rightEnd = width - 1;
-    const unsigned downEnd = height - 1;
     for (unsigned y = 0; y < height; ++y) {
         for (unsigned x = 0; x < width; ++x) {
-            if (x == 0 && y == 0) {
+            if (x == 2 && y == 2) {
                 tiles.insert(std::make_pair(
                         Coord{x, y},
                         tileFactory.create(PortSet::of({Port::right(), Port::down()}))
                 ));
-            } else if (x == rightEnd && y == 0) {
+            } else if (x == 3 && y == 2) {
+                tiles.insert(std::make_pair(
+                        Coord{x, y},
+                        tileFactory.create(PortSet::of({Port::left(), Port::right()}))
+                ));
+            } else if (x == 4 && y == 2) {
+                tiles.insert(std::make_pair(
+                        Coord{x, y},
+                        tileFactory.create(PortSet::of({Port::left(), Port::right()}))
+                ));
+            } else if (x == 5 && y == 2) {
                 tiles.insert(std::make_pair(
                         Coord{x, y},
                         tileFactory.create(PortSet::of({Port::left(), Port::down()}))
                 ));
-            } else if (x == 0 && y == downEnd) {
+            } else if (x == 5 && y == 3) {
+                tiles.insert(std::make_pair(
+                        Coord{x, y},
+                        tileFactory.create(PortSet::of({Port::left(), Port::down(), Port::up()}))
+                ));
+            } else if (x == 4 && y == 3) {
+                tiles.insert(std::make_pair(
+                        Coord{x, y},
+                        tileFactory.create(PortSet::of({Port::right()}))
+                ));
+            } else if (x == 5 && y == 4) {
+                tiles.insert(std::make_pair(
+                        Coord{x, y},
+                        tileFactory.create(PortSet::of({Port::up(), Port::down()}))
+                ));
+            } else if (x == 5 && y == 5) {
+                tiles.insert(std::make_pair(
+                        Coord{x, y},
+                        tileFactory.create(PortSet::of({Port::up(), Port::left()}))
+                ));
+            } else if (x == 4 && y == 5) {
+                tiles.insert(std::make_pair(
+                        Coord{x, y},
+                        tileFactory.create(PortSet::of({Port::right(), Port::left()}))
+                ));
+            } else if (x == 3 && y == 5) {
+                tiles.insert(std::make_pair(
+                        Coord{x, y},
+                        tileFactory.create(PortSet::of({Port::right(), Port::left()}))
+                ));
+            } else if (x == 2 && y == 5) {
                 tiles.insert(std::make_pair(
                         Coord{x, y},
                         tileFactory.create(PortSet::of({Port::right(), Port::up()}))
                 ));
-            } else if (x == rightEnd && y == downEnd) {
-                tiles.insert(std::make_pair(
-                        Coord{x, y},
-                        tileFactory.create(PortSet::of({Port::left(), Port::up()}))
-                ));
-            } else if (x == 3 && y == 3) {
-                tiles.insert(std::make_pair(
-                        Coord{x, y},
-                        tileFactory.create(PortSet::of({Port::up()}))
-                ));
-            } else if (x == 0) {
+            } else if (x == 2 && y == 4) {
                 tiles.insert(std::make_pair(
                         Coord{x, y},
                         tileFactory.create(PortSet::of({Port::right(), Port::up(), Port::down()}))
                 ));
-            } else if (x == rightEnd) {
+            } else if (x == 3 && y == 4) {
                 tiles.insert(std::make_pair(
                         Coord{x, y},
-                        tileFactory.create(PortSet::of({Port::left(), Port::up(), Port::down()}))
+                        tileFactory.create(PortSet::of({Port::right(), Port::left()}))
                 ));
-            } else if (y == 0) {
+            } else if (x == 4 && y == 4) {
                 tiles.insert(std::make_pair(
                         Coord{x, y},
-                        tileFactory.create(PortSet::of({Port::left(), Port::right(), Port::down()}))
+                        tileFactory.create(PortSet::of({Port::left()}))
                 ));
-            } else if (y == downEnd) {
+            } else if (x == 2 && y == 3) {
                 tiles.insert(std::make_pair(
                         Coord{x, y},
-                        tileFactory.create(PortSet::of({Port::left(), Port::right(), Port::up()}))
+                        tileFactory.create(PortSet::of({Port::left(), Port::right(), Port::up(), Port::down()}))
                 ));
-            } else {
+            } else if (x == 1 && y == 3) {
                 tiles.insert(std::make_pair(
                         Coord{x, y},
-                        tileFactory.create(PortSet::of({Port::left(), Port::right(), Port::down(), Port::up()}))
+                        tileFactory.create(PortSet::of({Port::right()}))
+                ));
+            } else if (x == 3 && y == 3) {
+                tiles.insert(std::make_pair(
+                        Coord{x, y},
+                        tileFactory.create(PortSet::of({Port::left()}))
                 ));
             }
         }
