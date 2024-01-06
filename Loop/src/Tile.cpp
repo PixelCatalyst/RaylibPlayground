@@ -67,6 +67,11 @@ void Tile::drawOutline() const
     drawByVariant(SpriteVariant::OUTLINE);
 }
 
+void Tile::drawAnimGradient() const
+{
+    drawByVariant(SpriteVariant::ANIM_GRADIENT);
+}
+
 void Tile::drawByVariant(SpriteVariant variant) const
 {
     float halfSize = Tile::size() / 2.0f;

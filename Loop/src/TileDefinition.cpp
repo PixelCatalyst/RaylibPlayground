@@ -40,6 +40,8 @@ void TileDefinitionLoader::parseLine(Context& context, SpriteLoader& spriteLoade
                          context.tilesBasePath + friendlyId + fileExtension)
                     .add(SpriteVariant::OUTLINE,
                          context.tilesBasePath + friendlyId + context.outlineSpriteTag + fileExtension)
+                    .add(SpriteVariant::ANIM_GRADIENT,
+                         context.tilesBasePath + friendlyId + context.animGradientSpriteTag + fileExtension)
     );
     if (spriteLoader.getSprite(friendlyId) == nullptr) {
         TraceLog(LOG_FATAL, "Unable to parse tile definition because given sprite was not loaded");

@@ -34,5 +34,7 @@ public:
 
     void drawCenteredAsOutline(const Vector2& viewportSize) const;
 
+    void drawCenteredAsAnimGradient(const Vector2& viewportSize) const;
+
     void rotateTile(unsigned x, unsigned y);
 };

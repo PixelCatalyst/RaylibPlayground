@@ -25,6 +25,7 @@ private:
         const std::string defFilePath = "assets/tiles/tiledef";
         const std::string tilesBasePath = "assets/tiles/";
         const std::string outlineSpriteTag = "_outline";
+        const std::string animGradientSpriteTag = "_gradient";
 
         TileDefinition tileDef;
         char* currentDefFileText = nullptr;
